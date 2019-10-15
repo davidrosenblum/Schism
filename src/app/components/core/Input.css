@@ -1,0 +1,25 @@
+input.core{
+    background-color: silver;
+    border-radius: 6px;
+    border: 1px solid black;
+    box-sizing: border-box;
+    font-family: inherit;
+    font-size: inherit;
+    padding: 9px;
+    transition: 0.5s;
+    width: 100%;
+}
+
+input.core:focus{
+    outline: none;
+    background-color: black;
+    color: red;
+}
+
+input.core::placeholder{
+    color: gray;
+}
+
+div.core.input-container{
+    text-align: center;
+}

@@ -1,0 +1,107 @@
+﻿{"frames": {
+
+"left_idle instance 10000":
+{
+	"frame": {"x":0,"y":0,"w":56,"h":128},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":0,"w":56,"h":128},
+	"sourceSize": {"w":56,"h":128}
+},
+"left_idle instance 10001":
+{
+	"frame": {"x":56,"y":0,"w":56,"h":128},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":0,"w":56,"h":128},
+	"sourceSize": {"w":56,"h":128}
+},
+"left_run instance 10000":
+{
+	"frame": {"x":112,"y":0,"w":56,"h":128},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":1,"y":0,"w":57,"h":128},
+	"sourceSize": {"w":57,"h":128}
+},
+"left_run instance 10001":
+{
+	"frame": {"x":168,"y":0,"w":56,"h":128},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":0,"w":57,"h":128},
+	"sourceSize": {"w":57,"h":128}
+},
+"left_run instance 10002":
+{
+	"frame": {"x":0,"y":128,"w":54,"h":128},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":0,"w":57,"h":128},
+	"sourceSize": {"w":57,"h":128}
+},
+"left_run instance 10003":
+{
+	"frame": {"x":54,"y":128,"w":56,"h":128},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":0,"w":57,"h":128},
+	"sourceSize": {"w":57,"h":128}
+},
+"right_idle instance 10000":
+{
+	"frame": {"x":110,"y":128,"w":55,"h":128},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":55,"h":128},
+	"sourceSize": {"w":55,"h":128}
+},
+"right_idle instance 10001":
+{
+	"frame": {"x":165,"y":128,"w":55,"h":128},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":55,"h":128},
+	"sourceSize": {"w":55,"h":128}
+},
+"right_run instance 10000":
+{
+	"frame": {"x":0,"y":256,"w":56,"h":128},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":56,"h":128},
+	"sourceSize": {"w":56,"h":128}
+},
+"right_run instance 10001":
+{
+	"frame": {"x":56,"y":256,"w":56,"h":128},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":56,"h":128},
+	"sourceSize": {"w":56,"h":128}
+},
+"right_run instance 10002":
+{
+	"frame": {"x":112,"y":256,"w":54,"h":128},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":0,"w":56,"h":128},
+	"sourceSize": {"w":56,"h":128}
+},
+"right_run instance 10003":
+{
+	"frame": {"x":166,"y":256,"w":56,"h":128},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":56,"h":128},
+	"sourceSize": {"w":56,"h":128}
+}},
+"meta": {
+	"app": "Adobe Animate",
+	"version": "19.2.1.408",
+	"image": "art3.png",
+	"format": "RGBA8888",
+	"size": {"w":256,"h":512},
+	"scale": "1"
+}
+}

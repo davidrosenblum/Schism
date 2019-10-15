@@ -1,0 +1,28 @@
+div.hud-player-stats-container{
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    padding: 5px;
+    padding-top: 20px;
+    min-width: 300px;
+    min-height: 175px;
+}
+
+div.hud-player-stats-container *{
+    vertical-align: middle;
+}
+
+div.hud-player-stats-container table{
+    margin: auto;
+}
+
+div.hud-player-stats-container tr{
+    text-align: left;
+}
+
+div.hud-player-stats-container tr:nth-of-type(-n+2){
+    text-align: center;
+}
+
+div.hud-player-stats-container td{
+    padding: 1px 5px 1px 5px;
+}

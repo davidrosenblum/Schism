@@ -1,0 +1,43 @@
+table.core{
+    border: 1px solid black;
+    border-collapse: collapse;
+    padding: 6px;
+    width: 100%;
+    table-layout: fixed;
+    text-align: left;
+}
+
+table.core thead{
+    background-color: #222222;
+    color: white;
+}
+
+table.core tr{
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+}
+
+table.core tbody tr td, table.core thead tr th{
+    padding: 12px;
+}
+
+table.core tbody{
+    display: block;
+    width: 100%;
+    max-height: 300px;
+    overflow: auto;
+}
+
+table.core tbody tr:nth-child(odd){
+    background-color: silver;
+}
+
+table.core tbody tr:nth-child(even){
+    background-color: gray;
+}
+
+div.core.table-container{
+    overflow-x: auto;
+    text-align: center;
+}

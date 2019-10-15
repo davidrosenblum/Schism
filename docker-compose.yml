@@ -1,0 +1,19 @@
+version: "3"
+services: 
+  web:
+    container_name: "web"
+    build: .
+    ports: 
+      - "8080:8080"
+    links:
+      - mongo
+    restart: always
+
+  mongo:
+    container_name: "mongo"
+    image: mongo
+    volumes:
+      - ./data/db
+    ports:
+      - "27017:27017"
+

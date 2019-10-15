@@ -1,0 +1,8 @@
+figure.player-container{
+    /* background: #aaaaaa; */
+    color: white;
+    background-color: #202022;
+    border: 1px solid black;
+    border-radius: 6px;
+    padding: 10px;
+}

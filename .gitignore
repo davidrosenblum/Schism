@@ -1,0 +1,17 @@
+# ignore node modules
+node_modules/
+
+# ignore built app/server
+build/
+
+# ignore certificates folder
+certs/
+
+# ignore static files except fonts folder
+!public/static/fonts
+
+# ignore local art files
+docs/*.fla
+
+# ignore local settings
+settings.json

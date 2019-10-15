@@ -1,0 +1,28 @@
+div.hud-target-stats-container{
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    padding: 5px;
+    padding-top: 20px;
+    min-width: 300px;
+    min-height: 175px;
+}
+
+div.hud-target-stats-container *{
+    vertical-align: middle;
+}
+
+div.hud-target-stats-container table{
+    margin: auto;
+}
+
+div.hud-target-stats-container tr{
+    text-align: left;
+}
+
+div.hud-target-stats-container tr:nth-of-type(-n+2){
+    text-align: center;
+} 
+
+div.hud-target-stats-container td{
+    padding: 1px 5px 1px 5px;
+}

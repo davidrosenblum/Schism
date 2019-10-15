@@ -1,0 +1,8 @@
+tr.map-list-item{
+    cursor: pointer;
+}
+
+tr.map-list-item.selected{
+    border-top: 2px solid red;
+    border-bottom: 2px solid red;
+}

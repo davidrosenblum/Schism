@@ -1,0 +1,60 @@
+div.core.modal-container{
+    background-color: transparent;
+    height: 100%;
+    left: 0px;
+    position: fixed;
+    top: 0px;
+    width: 100%;
+    z-index: 15;
+}
+
+div.core.modal{
+    background-color: gray;
+    border: 1px solid black;
+    border-radius: 6px;
+    box-shadow: 1px 1px 1px 1px black;
+    margin: auto;
+    margin-top: 100px;
+    width: 400px;
+}
+
+div.core.modal-header{
+    background-color: silver;
+    border-bottom: 1px solid black;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    padding: 10px;
+    text-align: center;
+}
+
+div.core.modal-body{
+    padding: 10px;
+}
+
+div.core.modal-footer{
+    background-color: silver;
+    border-top: 1px solid black;
+    padding: 10px;
+    text-align: center;
+}
+
+span.core.modal-x{
+    cursor: pointer;
+    float: right;
+    font-weight: bold;
+}
+
+div.core.modal-x::after{
+    content: "&times;"
+}
+
+div.core.modal-shadow{
+    background-color: black;
+    height: 100%;
+    left: 0px;
+    opacity: 0.75;
+    position: fixed;
+    top: 0px;
+    width: 100%;
+    z-index: 12;
+}

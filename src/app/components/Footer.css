@@ -1,0 +1,14 @@
+footer.footer{
+    width: 400px;
+    text-align: center;
+    margin: auto;
+}
+
+footer.footer .footer-items > * {
+    vertical-align: middle;
+}
+
+footer.footer > hr{
+    border-top: 1px solid black;
+    margin-bottom: 15px;
+}

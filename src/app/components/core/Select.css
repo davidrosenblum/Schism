@@ -1,0 +1,20 @@
+select.core{
+    background-color: silver;
+    border: 1px solid black;
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: inherit;
+    padding: 9px;
+    transition: 0.5s;
+    width: 100%;
+}
+
+select.core:focus{
+    background-color: black;
+    color: red;
+    outline: none;
+}
+
+div.core.select-container{
+    text-align: center;
+}

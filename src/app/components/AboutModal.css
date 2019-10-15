@@ -1,0 +1,13 @@
+div.about-container a{
+    color: darkred;
+    text-decoration: none;
+    transition: 0.5s;
+}
+
+div.about-container a:hover{
+    color: gold;
+}
+
+div.about-container ul{
+    list-style: square;
+}

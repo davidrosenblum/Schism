@@ -1,0 +1,43 @@
+﻿{"frames": {
+
+"left_idle instance 10000":
+{
+	"frame": {"x":0,"y":0,"w":128,"h":222},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":0,"w":128,"h":224},
+	"sourceSize": {"w":128,"h":224}
+},
+"left_idle instance 10001":
+{
+	"frame": {"x":128,"y":0,"w":128,"h":222},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":2,"w":128,"h":224},
+	"sourceSize": {"w":128,"h":224}
+},
+"right_idle instance 10000":
+{
+	"frame": {"x":256,"y":0,"w":129,"h":221},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":0,"w":129,"h":221},
+	"sourceSize": {"w":129,"h":221}
+},
+"right_idle instance 10001":
+{
+	"frame": {"x":0,"y":222,"w":129,"h":221},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":0,"w":129,"h":221},
+	"sourceSize": {"w":129,"h":221}
+}},
+"meta": {
+	"app": "Adobe Animate",
+	"version": "19.2.1.408",
+	"image": "art2.png",
+	"format": "RGBA8888",
+	"size": {"w":512,"h":512},
+	"scale": "1"
+}
+}

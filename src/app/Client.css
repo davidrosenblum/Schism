@@ -1,0 +1,27 @@
+@font-face{
+    font-family: Electrolize;
+    src: url("/fonts/Electrolize-Regular.ttf")
+}
+
+body{
+    margin: 0px;
+    font-family: electrolize;
+    font-size: 1em;
+}
+
+.text-center{
+    text-align: center;
+}
+
+.text-left{
+    text-align: left;
+}
+
+.text-right{
+    text-align: right;
+}
+
+::selection{
+    background-color: black;
+    color: red;
+}

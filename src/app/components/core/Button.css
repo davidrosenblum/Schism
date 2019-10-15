@@ -1,0 +1,24 @@
+button.core{
+    border-radius: 6px;
+    border: 1px solid black;
+    background-color: silver;
+    font-family: inherit;
+    font-size: inherit;
+    padding: 9px;
+    min-width: 100px;
+    transition: 0.5s;
+}
+
+button.core:focus{
+    outline: none;
+}
+
+button.core:hover{
+    color: red;
+    background-color: black;
+}
+
+button.core:disabled{
+    background-color: darkgray;
+    color: gray;
+}

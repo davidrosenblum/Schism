@@ -1,0 +1,29 @@
+.hud-chat-output-container, .hud-chat-input-container{
+    width: 300px;
+}
+
+.hud-chat-container textarea, .hud-chat-container input{
+    background-color: transparent;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    border: none;
+    box-sizing: border-box;
+    font-family: electrolize;
+    font-size: 1rem;
+    width: 300px;
+}
+
+.hud-chat-container textarea:focus, .hud-chat-container input:focus{
+    outline: none;
+}
+
+.hud-chat-container textarea{
+    height: 200px;
+    padding: 20px;
+}
+
+
+.hud-chat-container input{
+    min-height: 50px;
+    padding: 15px;
+}
