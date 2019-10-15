@@ -1,6 +1,6 @@
 # Schism
 
-![Schism](https://github.com/davidrosenblum/schism/tree/master/src/app/assets/images/ui_logo.png?raw=true "Schism")
+![Schism](https://raw.githubusercontent.com/davidrosenblum/schism/master/src/app/assets/images/ui_logo.png"Schism")
 
 ### Environment Setup
 1. Install [MongoDB]([https://www.mongodb.com/download-center/community](https://www.mongodb.com/download-center/community)) (4.2.x reccommended)
