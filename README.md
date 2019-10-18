@@ -22,6 +22,10 @@ Click proceed to localhost.
 
 Now, ws://localhost:8080 should work using the localhost:3000 client to connect.
 
+Getting constant socket connection errors when trying to login?
+
+Make sure you have the `port=8080` query string (or whatever port the server is running on) in the browser! 
+
 ### Settings File
 ```javascript
 {

@@ -1,5 +1,6 @@
 import { Ability, AbilityTargets, TargetRelationship, AbilityRange, AbilityConfig } from "./Ability";
 import { Unit } from "../entities/Unit";
+import { buffHealth, damageOnce, damageOverTime, debuffResistance } from "./AbilityPresets";
 
 export const KnightAbility1:AbilityConfig = {
     name: "Impale",
@@ -12,16 +13,18 @@ export const KnightAbility1:AbilityConfig = {
     maxTargets: 1,
     recharge: 1,
     affect: (caster, target, relationship) => {
-        if(target.rollDodge()){
+        if(target.rollDodge())
             return false;
-        }
 
-        const critBonus:number = caster.rollCritical() ? 1 : 1.25;
-        const damage:number = 4 * critBonus;
-        const dot:number = 6 * critBonus;
-        const ticks:number = 3;
-
-        target.takeDamageOverTime(damage, dot, ticks);
+        damageOverTime({
+            caster,
+            target,
+            baseDamage: 4,
+            dotTotal:   6,
+            ticks:      3,
+            critMult:   1.25
+        });
+        
         return true;
     }
 };
@@ -37,14 +40,16 @@ export const KnightAbility2:AbilityConfig = {
     maxTargets: 1,
     recharge: 5,
     affect: (caster, target, relationship) => {
-        if(target.rollDodge()){
+        if(target.rollDodge())
             return false;
-        }
 
-        const critBonus:number = caster.rollCritical() ? 1 : 1.25;
-        const damage:number = 12 * critBonus;
+        damageOnce({
+            caster,
+            target,
+            baseDamage: 12,
+            critMult:   1.25,
+        });
 
-        target.takeDamage(damage);
         return true;
     }
 };
@@ -60,7 +65,12 @@ export const KnightAbility3:AbilityConfig = {
     maxTargets: 1,
     recharge: 45,
     affect: (caster, target, relationship) => {
-        caster.health.modifyCapacityPercentKeepRatio(1.25, 20);
+        buffHealth({
+            target:         caster,
+            percent:        1.25,
+            durationSec:    20
+        });
+        
         return true;
     }
 };
@@ -76,15 +86,22 @@ export const KnightAbility4:AbilityConfig = {
     maxTargets: 1,
     recharge: 12,
     affect: (caster, target, relationship) => {
-        if(target.rollDodge()){
+        if(target.rollDodge())
             return false;
-        }
 
-        const critBonus:number = caster.rollCritical() ? 1 : 1.25;
-        const damage:number = 18 * critBonus;
+        damageOnce({
+            caster,
+            target,
+            baseDamage: 18,
+            critMult:   1.25
+        });
 
-        target.takeDamage(damage);
-        target.resistance.modifyCapacityKeepRatio(-0.20, 10);
+        debuffResistance({
+            target,
+            percent:        -0.20,
+            durationSec:    10 
+        });
+
         return true;
     }
 };

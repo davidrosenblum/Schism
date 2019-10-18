@@ -1,5 +1,5 @@
-import { Ability, AbilityTargets, AbilityRange, TargetRelationship, AbilityConfig } from "./Ability";
-import { Unit } from "../entities/Unit";
+import { AbilityTargets, AbilityRange, TargetRelationship, AbilityConfig } from "./Ability";
+import { damageOnce, damageOverTime, heal, giveMana, buffResistance } from "./AbilityPresets";
 
 export const AlchemistAbility1:AbilityConfig = {
     name: "Arcane Bolt",
@@ -12,13 +12,16 @@ export const AlchemistAbility1:AbilityConfig = {
     maxTargets: 1,
     recharge: 1,
     affect: (caster, target, relationship) => {
-        if(target.rollDodge()){
+        if(target.rollDodge())
             return false;
-        }
 
-        const critBonus:number = caster.rollCritical() ? 1.33 : 1;
-        const damage:number = 4 * critBonus;
-        target.takeDamage(damage);
+        damageOnce({
+            caster,
+            target,
+            baseDamage: 4,
+            critMult: 1.33
+        });
+
         return true;
     }
 };
@@ -34,22 +37,25 @@ export const AlchemistAbility2:AbilityConfig = {
     maxTargets: 16,
     recharge: 1,
     affect: (caster, target, relationship) => {
-        if(target.rollDodge()){
+        if(target.rollDodge())
             return false;
-        }
 
-        const critBonus:number = caster.rollCritical() ? 1.33 : 1;
-        const damage:number = 8 * critBonus;
-        const dot:number = 6 * critBonus;
-        const ticks:number = 3;
-        target.takeDamageOverTime(damage, dot, ticks);
+        damageOverTime({
+            caster,
+            target,
+            baseDamage: 8,
+            dotTotal: 6,
+            ticks: 3,
+            critMult: 1.33
+        });
+
         return true;
     }
 };
 
 export const AlchemistAbility3:AbilityConfig = {
     name: "Mana Burst",
-    internalName: "achelmist3",
+    internalName: "alchemist3",
     description: "",
     manaCost: 14,
     targets: AbilityTargets.ALL,
@@ -61,17 +67,32 @@ export const AlchemistAbility3:AbilityConfig = {
         switch(relationship){
             case TargetRelationship.SELF:
             case TargetRelationship.ALLIES:
-                target.health.modifyPercent(0.10);
-                target.mana.modifyPercent(0.10);
+                heal({
+                    target,
+                    percent: 0.10
+                });
+
+                giveMana({
+                    target,
+                    percent: 0.10
+                });
+
                 return true;
 
             case TargetRelationship.ENEMIES:
-                if(!target.rollDodge()){
-                    const critBonus:number = caster.rollCritical() ? 1.33 : 1;
-                    const damage:number = 15 * critBonus;
-                    target.takeDamage(damage);
-                    return true;
-                }
+                if(target.rollDodge())
+                    return false;
+
+                damageOnce({
+                    caster,
+                    target,
+                    baseDamage: 15,
+                    critMult: 1.33
+                });
+                
+                return true;
+
+            default:
                 return false;
         }
     }
@@ -88,8 +109,17 @@ export const AlchemistAbility4:AbilityConfig = {
     maxTargets: 8,
     recharge: 60,
     affect: (caster, target, relationship) => {
-        target.health.modifyPercent(0.20)
-        target.resistance.modifyCapacityKeepRatio(0.20, 45);
+        heal({
+            target,
+            percent: 0.20
+        });
+
+        buffResistance({
+            target,
+            percent: 0.20,
+            durationSec: 45
+        });
+
         return true;
     }
 };

@@ -1,25 +1,34 @@
-import { Ability } from "./Ability";
+import { Ability, AbilityType } from "./Ability";
 import { AlchemistAbility1, AlchemistAbility2, AlchemistAbility3, AlchemistAbility4 } from "./AlchemistAbilities";
 import { KnightAbility1, KnightAbility2, KnightAbility3, KnightAbility4 } from "./KnightAbilities";
 import { RangerAbility1, RangerAbility2, RangerAbility3, RangerAbility4 } from "./RangerAbilities";
+import { Lich1, Lich2 } from "./UndeadAbilities";
 
-const abilities:{[name:string]: () => Ability} = {
-    "alchemist1": () => new Ability(AlchemistAbility1),
-    "alchemist2": () => new Ability(AlchemistAbility2),
-    "alchemist3": () => new Ability(AlchemistAbility3),
-    "alchemist4": () => new Ability(AlchemistAbility4),
-    "knight1": () => new Ability(KnightAbility1),
-    "knight2": () => new Ability(KnightAbility2),
-    "knight3": () => new Ability(KnightAbility3),
-    "knight4": () => new Ability(KnightAbility4),
-    "ranger1": () => new Ability(RangerAbility1),
-    "ranger2": () => new Ability(RangerAbility2),
-    "ranger3": () => new Ability(RangerAbility3),
-    "ranger4": () => new Ability(RangerAbility4)
-};
+// array of all the ability configurations
+const abilityConfigs = [
+    AlchemistAbility1, AlchemistAbility2, AlchemistAbility3, AlchemistAbility4,
+    KnightAbility1, KnightAbility2, KnightAbility3, KnightAbility4,
+    RangerAbility1, RangerAbility2, RangerAbility3, RangerAbility4,
+    Lich1, Lich2
+];
+
+// reduce the abilities array into a dictionary of {[abilityType]: () => new Ability(type)}
+const abilities:{[name:string]: ()=>Ability} = abilityConfigs.reduce((acc, val) => {
+    // create a dictionary to hold the {ability: createFunction}
+    const abilityDict:{[name:string]: ()=>Ability} = {};
+    // store the createFunction in the dictionary under the ability name key
+    abilityDict[val.internalName] = () => new Ability(val);
+    // create new object by merging the accumulator with new ability dict
+    return {...acc, ...abilityDict};
+}, {});
 
 export class AbilityFactory{
-    public static create(type:string):Ability{
+    /**
+     * Creates a new ability object based on the ability type
+     * @param type ability internal name
+     * @returns ability object
+     */
+    public static create(type:AbilityType):Ability{
         if(type in abilities){
             return abilities[type]();
         }

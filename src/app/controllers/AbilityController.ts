@@ -6,7 +6,7 @@ export const processAbilityCast = (payload:any):void => {
     const {error} = payload;
 
     if(error){
-        chatBuffer.write(error);
+        // chatBuffer.write(error);
     }
 
     store.dispatch(setAbilityCastPending(false));

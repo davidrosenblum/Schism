@@ -1,14 +1,14 @@
 # ignore node modules
 node_modules/
 
-# ignore built app/server
+# ignore built server
 build/
 
 # ignore certificates folder
 certs/
 
-# ignore static files except fonts folder
-!public/static/fonts
+# ignore built client
+public/static/build
 
 # ignore local art files
 docs/*.fla

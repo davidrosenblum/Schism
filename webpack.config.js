@@ -4,11 +4,13 @@ module.exports = {
     entry: path.resolve("src/app/Client.tsx"),
     output: {
         filename: "bundle.js",
-        path: path.resolve("public/static")
+        path: path.resolve("public/build"),
+        publicPath: "build/"
     },
     devServer: {
         port: 3000,
-        contentBase: path.resolve("public/static")
+        contentBase: path.resolve("public"),
+        publicPath: "build/"
     },
     resolve: {
         extensions: [
@@ -22,7 +24,7 @@ module.exports = {
                 test: /\.tsx?$/i,
                 use: "ts-loader",
                 exclude: [
-                    path.resolve("src/server")
+                    path.resolve("src/server") // server is built by tsc 
                 ]
             },
             {

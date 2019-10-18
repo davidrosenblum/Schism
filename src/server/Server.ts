@@ -33,10 +33,8 @@ export class Server{
     private createRoutes():void{
         this._app.use(express.json());
         this._app.use(cors());
-        this._app.use(express.static(path.resolve("public/static")));
+        this._app.use(express.static(path.resolve("public")));
 
-        this._app.get("/", (req, res) => res.sendFile(path.resolve("public/index.html")));
-        this._app.get("/favicon.png", (req, res) => res.sendFile(path.resolve("public/favicon.png")));
         this._app.post("/accounts/create", AccountCreate.post);
         this._app.get("/players/list/:accountId", PlayerList.get);
         this._app.get("/maps/list", MapList.get);

@@ -1,59 +1,104 @@
-import { Ability, AbilityState } from "../abilities/Ability";
+import { Ability, AbilityState, AbilityType } from "../abilities/Ability";
 import { AbilityFactory } from "../abilities/AbilityFactory";
-import { CombatEntity, CombatEntityParams, CombatEntityState, CombatEntityUpdate, CombatEntityStats } from "./CombatEntity";
-import { UpdateEvent } from "./Entity2D";
+import { CombatObject, CombatObjectParams, CombatObjectState, CombatObjectStats, CombatObjectUpdate } from "./CombatObject";
+import { UpdateEvent } from "./Object2D";
 
-export interface UnitParams extends CombatEntityParams{
-    abilities?:Iterable<string>;
+/**
+ * Unit constructor parameters
+ */
+export interface UnitParams extends CombatObjectParams{
+    abilities?:Iterable<AbilityType>;
 }
 
-export interface UnitState extends CombatEntityState{
+/**
+ * Unit state representation
+ */
+export interface UnitState extends CombatObjectState{
     abilities:AbilityState[];
 }
 
-export interface UnitStats extends CombatEntityStats{
-    // more stats?
+/**
+ * Unit stats representation
+ */
+export interface UnitStats extends CombatObjectStats{
 }
 
-export interface UnitUpdateData{
+/**
+ * Update data specific to the Unit class
+ */
+export interface UnitData{
     abilities?:AbilityState[];
 }
 
-export type UnitUpdate = UnitUpdateData & CombatEntityUpdate;
+/**
+ * Unit update includes Unit-specific and inherited update data
+ */
+export type UnitUpdate = UnitData & CombatObjectUpdate;
 
+/**
+ * Unit update event
+ */
 export type UnitUpdateEvent = UpdateEvent<Unit, UnitUpdate>;
 
-export class Unit extends CombatEntity{
+export abstract class Unit extends CombatObject{
     private _abilities:Map<string, Ability>;
 
+    /**
+     * Constructs a unit object
+     * @param params unit parameters
+     */
     constructor(params:UnitParams){
         super(params);
 
         this._abilities = new Map();
 
+        // learn preset abilities
         if(params.abilities)
             this.learnAbilities(params.abilities);
     }
 
-    public learnAbility(name:string):boolean{
-        const ability:Ability = AbilityFactory.create(name);
-        if(ability){
-            this._abilities.set(ability.internalName, ability);
-            return true;
-        }
-        return false;
+    /**
+     * Learns an ability 
+     * @param type ability type (internal name)
+     * @returns true/false if ability was learned (not known and valid type)
+     */
+    public learnAbility(type:AbilityType):boolean{
+        // already known ability?
+        if(this._abilities.has(type))
+            return false;
+
+        // ability exists?
+        const ability:Ability = AbilityFactory.create(type);
+        if(!ability)
+            return false;
+
+        // learn ability
+        this._abilities.set(ability.internalName, ability);
+        return true;
     }
 
-    public learnAbilities(names:Iterable<string>):void{
-        for(let name of names){
-            this.learnAbility(name);
-        }
+    /**
+     * Learns a group of abilities
+     * @param types ability types (internal names) to learn
+     */
+    public learnAbilities(types:Iterable<AbilityType>):void{
+        for(let type of types)
+            this.learnAbility(type);
     }
 
-    public getAbility(name:string):Ability{
+    /**
+     * Gets an learned ability by its internal name
+     * @param name enumerated ability internal name
+     * @returns the ability
+     */
+    public getAbility(name:AbilityType):Ability{
         return this._abilities.get(name);
     }
 
+    /**
+     * Gets an ability at random
+     * @returns the randomly selected ability
+     */
     public getAnyAbility():Ability{
         // random ability index
         const index:number = Math.floor(Math.random() * this._abilities.size);
@@ -66,11 +111,15 @@ export class Unit extends CombatEntity{
             }
         }
 
-        return null; // should never happen!
+        return null; // only happens if the unit has no abilities
     }
 
+    /**
+     * Gets an object that represents the unit's state
+     * @returns unit state object
+     */
     public getState():UnitState{
-        // convert map to array of string names
+        // convert ability map to array of ability states
         let abilities:AbilityState[] = new Array(this._abilities.size);
         let i:number = 0;
         this._abilities.forEach(ability => abilities[i++] = ability.getState());
@@ -79,4 +128,10 @@ export class Unit extends CombatEntity{
             ...super.getState(), abilities
         };
     }
+
+    /**
+     * Getter for level
+     * @returns level
+     */
+    public abstract get level():number;
 }
