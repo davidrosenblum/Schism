@@ -1,14 +1,17 @@
-import { MapLevelRange } from "./MapLevelRange";
-import { MapPathGraph } from "./MapPathGraph";
-import { CombatEvent, DeathEvent } from "../entities/CombatEntity";
-import { UpdateEvent, Entity2DState } from "../entities/Entity2D";
+import { MapAI } from "./MapAI";
+import { MapNPCs } from "./MapNPCs";
+import { MapPathFinder } from "./MapPathFinder";
+import { CombatEvent, DeathEvent } from "../entities/CombatObject";
+import { UpdateEvent, Object2DState } from "../entities/Object2D";
 import { NPC } from "../entities/NPC";
-import { NPCFactory, NpcFaction } from "../entities/NPCFactory";
+import { NpcFaction } from "../entities/NPCFactory";
 import { Unit, UnitUpdate, UnitState } from "../entities/Unit";
 import { User } from "../users/User";
 import { UserUpdater } from "../users/UserUpdater";
-import { rngInt } from "../utils/RNG";
 import { TokenGenerator } from "../utils/TokenGenerator";
+import { MapCollision } from "./MapCollision";
+
+export type MapType = "Test";
 
 export enum MapDifficulty{
     TRAINING = 1, STANDARD = 2, VETERAN = 3, ELITE = 4, SUICIDAL = 5
@@ -21,7 +24,7 @@ export type MapTileLayout = MapTileLayer[];
 export type MapLocation = {row:number, col:number};
 
 export interface MapInstanceParams{
-    type:string;
+    type:MapType;
     tileLayout:MapTileLayout;
     playerSpawn:MapLocation;
     enemyFaction:NpcFaction;
@@ -57,7 +60,7 @@ export class MapInstance{
     private static readonly tokens:TokenGenerator = new TokenGenerator(8);
 
     private _id:string;
-    private _type:string;
+    private _type:MapType;
     private _playerSpawn?:MapLocation;
     private _layout:MapTileLayout;
     private _enemyFaction:NpcFaction;
@@ -68,6 +71,9 @@ export class MapInstance{
     private _users:Map<string, User>;
     private _units:Map<string, Unit>;
     private _objects:Map<string, any>;
+    private _ai:MapAI;
+    private _collision:MapCollision;
+    private _pathFinder:MapPathFinder;
 
     public onEmpty:(evt:MapEmptyEvent)=>void;
 
@@ -93,9 +99,14 @@ export class MapInstance{
         this._units =   new Map();
         this._objects = new Map();
 
+        
+        this._ai =          new MapAI(this);
+        this._collision =   new MapCollision(this._layout[1]);
+        this._pathFinder =  new MapPathFinder(this._layout[1]);
+
         this.onEmpty = null;
 
-        this.populateNPCs();
+        MapNPCs.populateNPCs(this, tileLayout[3]);
     }
 
     public chatAll(chat:string, from?:string):void{
@@ -196,30 +207,6 @@ export class MapInstance{
         return this._units.has(unit.id);
     }
 
-    private populateNPCs():void{
-        const layer:number[][] = this._layout[3];
-        const [minLvl, maxLvl] = MapLevelRange.getLevelRange(this.difficulty);
-
-        let npcIndex:number, npc:Unit, level:number;
-
-        for(let row:number = 0; row < layer.length; row++){
-            for(let col:number = 0; col < layer[row].length; col++){
-                npcIndex = layer[row][col] - 1;
-
-                if(npcIndex < 0){
-                    continue;
-                }
-
-                level = rngInt(minLvl, maxLvl);
-                npc = NPCFactory.createFromFaction(this.enemyFaction, npcIndex, {level});
-
-                if(npc){
-                    this.addUnit(npc, {row, col});
-                }
-            }
-        }
-    }
-
     private onUpdate = (evt:UpdateEvent<Unit, UnitUpdate>) => {
         const {target, update} = evt;
         this._users.forEach(user => UserUpdater.entityUpdated(user, target.id, update));   
@@ -254,21 +241,6 @@ export class MapInstance{
         }, MapInstance.REZ_TIMEOUT);
     }
 
-    public checkCollision(unit:Unit):Entity2DState{
-        const layer:MapTileLayer = this._layout[1];
-        const s:number = MapInstance.TILE_SCALE;
-
-
-        for(let row:number = 0; row < layer.length; row++){
-            for(let col:number = 0; col < layer[row].length; col++){
-                if(layer[row][col] > 0){
-                    return {x: col * s, y: row * s, width: s, height: s};
-                }
-            }
-        }
-        return null;
-    }
-
     public applySafeUserUpdate(user:User, update:any):boolean{
         const {
             id=null, x=undefined, y=undefined, anim=undefined, facing=undefined
@@ -295,10 +267,16 @@ export class MapInstance{
         this._units.clear();
         this._objects.clear();
         this.onEmpty = null;
+        this.ai.destroy();
+        this._ai = null
     }
 
-    public getPathGraph():MapPathGraph{
-        return new MapPathGraph(this._layout[1]);
+    public getUnitLocation(unitId:string):MapLocation{
+        const unit:Unit = this._units.get(unitId);
+        return unit ? {
+            row: Math.round(unit.bottom / MapInstance.TILE_SCALE),
+            col: Math.round(unit.centerX / MapInstance.TILE_SCALE)
+        } : null;
     }
 
     public getAllUnits():Unit[]{
@@ -351,7 +329,7 @@ export class MapInstance{
         return this._id;
     }
 
-    public get type():string{
+    public get type():MapType{
         return this._type;
     }
 
@@ -385,5 +363,17 @@ export class MapInstance{
 
     public get isEmpty():boolean{
         return this.population === 0;
+    }
+
+    public get ai():MapAI{
+        return this._ai;
+    }
+
+    public get collision():MapCollision{
+        return this._collision;
+    }
+
+    public get pathFinder():MapPathFinder{
+        return this._pathFinder;
     }
 }

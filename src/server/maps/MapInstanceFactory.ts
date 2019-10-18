@@ -1,16 +1,16 @@
-import { MapInstance, MapDifficulty } from "./MapInstance";
+import { MapInstance, MapDifficulty, MapType } from "./MapInstance";
 import { MAP1_LAYOUT } from "./MapLayouts";
-import { NPC } from "../entities/NPC";
-import { NPCFactory } from "../entities/NPCFactory";
 
+// map configruation from user
 interface Config{
     difficulty:MapDifficulty;
     customName:string;
     password?:string;
 }
 
-const mapTypes:{[type:string]: (configuration:Config)=>MapInstance} = {
-    "Test": config => {
+// preset maps
+const mapTypes:Map<MapType, (config:Config)=>MapInstance> = new Map([
+    ["Test", config => {
         return new MapInstance({
             ...config,
             type:               "Test",
@@ -19,13 +19,22 @@ const mapTypes:{[type:string]: (configuration:Config)=>MapInstance} = {
             populationLimit:    4,
             tileLayout:         MAP1_LAYOUT
         });
-    }
-};
+    }]
+]);
 
 export class MapInstanceFactory{
-    public static create(type:string, difficulty:MapDifficulty, customName:string, password?:string):MapInstance{
-        if(type in mapTypes){
-            return mapTypes[type]({difficulty, customName, password});
+    /**
+     * Creates a map instance from the given parameters
+     * @param type          map type (responsible for layout)
+     * @param difficulty    map difficulty for enemy levels
+     * @param customName    assigned public name for the map
+     * @param password      optional map password
+     * @returns the generated map instance
+     */
+    public static create(type:MapType, difficulty:MapDifficulty, customName:string, password?:string):MapInstance{
+        if(mapTypes.has(type)){
+            // map type exists, create the map with parameters
+            return mapTypes.get(type)({difficulty, customName, password});
         }
         return null;
     }
