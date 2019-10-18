@@ -60,22 +60,34 @@ export class GameEntity extends GameObject{
 
     private beforeNameTagDraw = (ctx:CanvasRenderingContext2D, offsetX:number, offsetY:number):void => {
         const {
-            faction, health, healthCap
+            faction, health, healthCap, mana, manaCap
         } = this._stats.getState();
 
-        const h:number = 4;
-        const y:number = offsetY - h - 1;
+        const w:number = this.drawBox.width;
+        const h:number = 5;
+        const y2:number = offsetY - h;  // health
+        const y1:number = y2 - h;       // mana
 
         ctx.save();
 
         ctx.strokeStyle = "black"
-        ctx.strokeRect(offsetX, y, this.drawBox.width, h);
+        ctx.strokeRect(offsetX, y1, w, h);
 
         ctx.fillStyle = (faction === "Players") ? "darkgreen" : "darkred";
-        ctx.fillRect(offsetX, y, this.drawBox.width, h);
+        ctx.fillRect(offsetX, y1, w, h);
 
         ctx.fillStyle = (faction === "Players") ? "lime" : "red";
-        ctx.fillRect(offsetX, y, Math.max(this.drawBox.width * (health / healthCap), 0), h);
+        ctx.fillRect(offsetX, y1, Math.max(w * (health / healthCap), 0), h);
+
+        ctx.fillStyle = "blue";
+        ctx.fillRect(offsetX, y2, w, h);
+
+        ctx.fillStyle = "royalblue";
+        ctx.fillRect(offsetX, y2, Math.max(w * (mana / manaCap), 0), h);
+
+        ctx.strokeStyle = "black";
+        ctx.strokeRect(offsetX, y1, w, h);
+        ctx.strokeRect(offsetX, y2, w, h);
 
         ctx.restore();
     }
@@ -96,7 +108,7 @@ export class GameEntity extends GameObject{
         }
 
         if(name){
-            this._nameTag = new TextField({text: name, y: -10});
+            this._nameTag = new TextField({text: name, y: -15});
             this._nameTag.beforeDraw = this.beforeNameTagDraw;
             this.addChild(this._nameTag);
             this._nameTag.centerText();
