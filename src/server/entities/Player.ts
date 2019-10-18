@@ -1,11 +1,16 @@
-import { Unit, UnitState, UnitUpdate, UnitStats } from './Unit';
-import { PlayerSchema, PlayerUpdateSchema } from '../database/DBPlayers';
-import { UpdateEvent } from './Entity2D';
+import { Unit, UnitState, UnitStats } from "./Unit";
+import { PlayerSchema, PlayerUpdateSchema } from "../database/DBPlayers";
 
+/**
+ * Enumerated player archetype ids
+ */
 export enum PlayerArchetype{
     KNIGHT = 1, RANGER = 2, ALCHEMIST = 3
 }
 
+/**
+ * Player state representation
+ */
 export interface PlayerState extends UnitState{
     archetype:PlayerArchetype;
     level:number;
@@ -14,6 +19,9 @@ export interface PlayerState extends UnitState{
     merits:number;
 }
 
+/**
+ * Player stats representation
+ */
 export interface PlayerStats extends UnitStats{
     level:number;
     xp:number;
@@ -21,16 +29,21 @@ export interface PlayerStats extends UnitStats{
     merits:number;
 }
 
+/**
+ * Update data specific to the Player class
+ */
 export type PlayerData = PlayerUpdateSchema;
 
-export type PlayerUpdate = UnitUpdate & PlayerData;
-
+/**
+ * Player update event
+ */
 export interface PlayerEvent{
     target:Player;
-    data:PlayerData;
+    data:PlayerUpdateSchema;
     message?:string;
 }
 
+// archetype default stats and increments ('bonus')
 type ATStatsData = {hp:number, hpBonus:number, mp:number, mpBonus:number, res:number, def:number, w:number, h:number};
 const ArchetypeStats:{[atId:number]: ATStatsData} = {
     1: {hp: 100, hpBonus: 3, mp: 100, mpBonus: 1, res: 0.20, def: 0.05, w: 55, h: 100},
@@ -51,6 +64,11 @@ export class Player extends Unit{
 
     public onPlayerUpdate:(evt:PlayerEvent)=>void;
 
+    /**
+     * Constructs a player
+     * @param saveData  player data from database
+     * @param ownerId   player's owner id (client id)
+     */
     constructor(saveData:PlayerSchema, ownerId:string){
         super({
             ownerId,
@@ -66,24 +84,31 @@ export class Player extends Unit{
             defense:        ArchetypeStats[saveData.archetype].def
         });
 
+        // restore attributes from saveData (database)
         this._archetype =   saveData.archetype;
-        this._level =       1;
-        this._xp =          0;
-        this._merits =      saveData.merits;
+        this._level =       saveData.level;
+        this._xp =          0;              // set later
+        this._merits =      0;              // set later
 
-        this.onPlayerUpdate = null;
-        this.addMerits(saveData.merits);
-        this.addXP(saveData.xp);
+        this.onPlayerUpdate = null;         // no default update listener
+        this.addMerits(saveData.merits);    // add merits (this respects capacity)
+        this.addXP(saveData.xp);            // add xp (levels up if xp was added outside game)
     }
 
+    /**
+     * Increments the player's level, boosts stats, refills hp/mp, and triggers player update
+     */
     private levelUp():void{
         if(!this.isLevelCap){
+            // increment level and reset xp
             this._level++;
             this._xp = 0;
 
+            // boost health capacity and refill health and mana
             this.health.modifyCapacity(ArchetypeStats[this.archetype].hpBonus);
             this.refill();
 
+            // trigger player update
             this.triggerPlayerUpdate(
                 {level: this.level},
                 `You reached level ${this.level}.`
@@ -91,6 +116,10 @@ export class Player extends Unit{
         }
     }
 
+    /**
+     * Adds experience to the player, applies levels if neccessary
+     * @param xp amount of experience to add
+     */
     public addXP(xp:number):void{
         while(xp >= this.xpToGo){
             xp -= this.xpToGo;
@@ -104,8 +133,12 @@ export class Player extends Unit{
         );
     }
 
+    /**
+     * Adds merits to the player, keeps within merit capacity and triggers player update
+     * @param merits amount of merits to add
+     */
     public addMerits(merits:number):void{
-        this._merits = Math.min(this.merits + merits, Player.MERITS_CAP);
+        this._merits = Math.min(this.merits + Math.abs(merits), Player.MERITS_CAP);
 
         this.triggerPlayerUpdate(
             {merits: this._merits},
@@ -113,20 +146,29 @@ export class Player extends Unit{
         );
     }
 
+    /**
+     * Toggles between run speed and move speed
+     */
     public toggleRun():void{
-        if(this.moveSpeed === Player.MOVE_SPEED){
+        if(this.moveSpeed === Player.MOVE_SPEED)
             this.moveSpeed = Player.RUN_SPEED;
-        }
-        else{
+        else
             this.moveSpeed = Player.MOVE_SPEED;
-        }
     }
 
+    /**
+     * Destructor for the player
+     */
     public destroy():void{
         super.destroy();
         this.onPlayerUpdate = null;
     }
 
+    /**
+     * Triggers the player update listener
+     * @param data      update event payload
+     * @param message   optional text message 
+     */
     private triggerPlayerUpdate(data:PlayerData, message?:string):void{
         if(this.onPlayerUpdate){
             this.onPlayerUpdate({
@@ -137,6 +179,10 @@ export class Player extends Unit{
         }
     }
 
+    /**
+     * Gets an object that represents the current stats of the player
+     * @returns player stats object
+     */
     public getStats():PlayerStats{
         const {
             level, xp, xpRequired, merits
@@ -147,6 +193,10 @@ export class Player extends Unit{
         }
     }
 
+    /**
+     * Gets an object that represents the current state of the player
+     * @returns player state object
+     */
     public getState():PlayerState{
         const {
             level, xp, xpRequired, merits, archetype
@@ -157,31 +207,59 @@ export class Player extends Unit{
         };
     }
 
+    /**
+     * Getter for the enumerated archetype id
+     * @returns enumerated archetype id
+     */
     public get archetype():PlayerArchetype{
         return this._archetype;
     }
 
+    /**
+     * Getter for if the player is level capped or not
+     * @returns is at level capacity or not
+     */
     public get isLevelCap():boolean{
         return this.level >= Player.LEVEL_CAP;
     }
 
+    /**
+     * Getter for level
+     * @returns level of the player
+     */
     public get level():number{
         return this._level;
     }
 
+    /**
+     * Getter for xp required for this level
+     * @returns total xp required for this level
+     */
     public get xpRequired():number{
         const n:number = this.level - 1;
         return (n + 2) * (n + 3) + 20;
     }
 
+    /**
+     * Getter for how much more xp is required to level
+     * @returns difference of xp required and xp
+     */
     public get xpToGo():number{
         return this.xpRequired - this.xp;
     }
 
+    /**
+     * Getter for experience
+     * @returns amount of experience points
+     */
     public get xp():number{
         return this._xp;
     }
 
+    /**
+     * Getter for merits
+     * @returns amount of merits
+     */
     public get merits():number{
         return this._merits;
     }
