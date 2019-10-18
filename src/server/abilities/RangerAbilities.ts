@@ -1,4 +1,5 @@
 import { AbilityConfig, AbilityTargets, AbilityRange } from "./Ability";
+import { damageOnce, damageOverTime, debuffHealth, debuffDefense, debuffResistance } from "./AbilityPresets";
 
 export const RangerAbility1:AbilityConfig = {
     name: "Quickshot",
@@ -11,13 +12,16 @@ export const RangerAbility1:AbilityConfig = {
     maxTargets: 1,
     recharge: 1,
     affect: (caster, target, relationship) => {
-        if(target.rollDodge()){
+        if(target.rollDodge())
             return false;
-        }
 
-        const critBonus:number = caster.rollCritical() ? 1.50 : 1;
-        const damage:number = 6 * critBonus;
-        target.takeDamage(damage);
+        damageOnce({
+            target,
+            caster,
+            baseDamage: 6,
+            critMult:   1.50
+        });
+
         return true;
     }
 };
@@ -33,19 +37,36 @@ export const RangerAbility2:AbilityConfig = {
     maxTargets: 1,
     recharge: 6,
     affect: (caster, target, relationship) => {
-        if(target.rollDodge()){
+        if(target.rollDodge())
             return false;
-        }
 
-        const critBonus:number = caster.rollCritical() ? 1.50 : 1;
-        const damage:number = 8 * critBonus;
-        const dot:number = 4 * critBonus;
-        const ticks:number = 3;
+        damageOverTime({
+            caster,
+            target,
+            baseDamage: 8,
+            dotTotal: 4,
+            ticks: 3,
+            critMult: 1.50
+        });
 
-        target.takeDamageOverTime(damage, dot, ticks);
-        target.resistance.modifyCapacityKeepRatio(-0.10, 10);
-        target.defense.modifyCapacityKeepRatio(-0.05, 10);
-        target.health.modifyCapacityPercent(-0.10, 10);
+        debuffResistance({
+            target,
+            percent: -0.10,
+            durationSec: 10
+        })
+
+        debuffDefense({
+            target,
+            percent: -0.05,
+            durationSec: 10
+        });
+
+        debuffHealth({
+            target,
+            percent: -0.10,
+            durationSec: 10
+        });
+
         return true;
     }
 };
@@ -61,13 +82,18 @@ export const RangerAbility3:AbilityConfig = {
     maxTargets: 6,
     recharge: 12,
     affect: (caster, target, relationship) => {
-        if(target.rollDodge()){
+        if(target.rollDodge())
             return false;
-        }
 
-        const critBonus:number = caster.rollCritical() ? 1.50 : 1;
-        const damage:number = 14 * critBonus;
-        target.takeDamage(damage);
+        damageOverTime({
+            caster,
+            target,
+            baseDamage: 14,
+            dotTotal:   3,
+            ticks:      3,
+            critMult:   1.50    
+        });
+
         return true;
     }
 };
@@ -83,13 +109,16 @@ export const RangerAbility4:AbilityConfig = {
     maxTargets: 16,
     recharge: 35,
     affect: (caster, target, relationship) => {
-        if(target.rollDodge()){
+        if(target.rollDodge())
             return false;
-        }
 
-        const critBonus:number = caster.rollCritical() ? 1.50 : 1;
-        const damage:number = 25 * critBonus;
-        target.takeDamage(damage);
+        damageOnce({
+            caster,
+            target,
+            baseDamage: 25,
+            critMult:   1.50    
+        });
+
         return true;
     }
 };
