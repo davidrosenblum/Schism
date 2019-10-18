@@ -89,9 +89,9 @@ export const RangerAbility3:AbilityConfig = {
             caster,
             target,
             baseDamage: 14,
-            dotTotal:   3,
-            ticks:      3,
-            critMult:   1.50    
+            dotTotal: 3,
+            ticks: 3,
+            critMult: 1.50    
         });
 
         return true;
@@ -116,7 +116,7 @@ export const RangerAbility4:AbilityConfig = {
             caster,
             target,
             baseDamage: 25,
-            critMult:   1.50    
+            critMult: 1.50    
         });
 
         return true;
