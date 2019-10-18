@@ -1,7 +1,7 @@
 import { Facing, Anim } from "./GameObject";
 import { NPC, NpcRank, NpcRange } from "./NPC";
 import { AbilityType } from "../abilities/Ability";
-import { randomIndex } from "../utils/RNG";
+import { randomElement } from "../utils/RNG";
 
 export type NpcFaction = "Undead";
 
@@ -138,7 +138,7 @@ export class NPCFactory{
             return null;
 
         // get the npc type from the provided index, or pick a random npc type if no index is provided
-        const type:NpcType = (typeof index === "number") ? types[index] : randomIndex(types);
+        const type:NpcType = (typeof index === "number") ? types[index] : <NpcType>randomElement(types);
 
         // create the npc from the selected type
         return this.create(type, options);
