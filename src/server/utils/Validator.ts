@@ -14,6 +14,11 @@ export const BAD_PASSWORD_REGEX:RegExp =            /[^A-Za-z0-9!#@$%^&]/gi;
 export const BAD_NAME_REGEX:RegExp =                /[^a-z0-9]/gi;
 export const BAD_MAP_NAME_REGEX:RegExp =            /[&a-z0-9\s]/gi;
 
+/**
+ * Validates user input based on configuration
+ * @param params    validation parameters 
+ * @param cb        callback with helpful error
+ */
 export const validate = (params:ValidationParams, cb:(err?:string)=>void):void => {
     const {
         input, inputName, lengths, invalidTest
@@ -21,24 +26,33 @@ export const validate = (params:ValidationParams, cb:(err?:string)=>void):void =
 
     const [min, max] = lengths;
 
+    // enforce minimum length
     if(input.length < min){
         cb(`${inputName} is too short, at least ${min} characters required.`);
         return;
     }
 
+    // enforce maximum length
     if(input.length > max){
         cb(`${inputName} is too short, at most ${max} characters allowed.`);
         return;
     }
 
+    // enforce valid characters
     if(invalidTest.test(input)){
         cb(`${inputName} contains invalid characters.`);
         return;
     }
 
+    // valid
     cb();
 };
 
+/**
+ * Validates account username input
+ * @param username  account username input
+ * @param cb        callback with helpful error
+ */
 export const validateUsername = (username:string, cb:(err?:string)=>void):void => {
     validate({
         input:          username,
@@ -48,6 +62,11 @@ export const validateUsername = (username:string, cb:(err?:string)=>void):void =
     }, cb);
 };
 
+/**
+ * Validates account password input
+ * @param password  account password input
+ * @param cb        callback with helpful error
+ */
 export const validatePassword = (password:string, cb:(err?:string)=>void):void => {
     validate({
         input:          password,
@@ -57,6 +76,11 @@ export const validatePassword = (password:string, cb:(err?:string)=>void):void =
     }, cb);
 };
 
+/**
+ * Validates player name input
+ * @param name  player name input
+ * @param cb    callback with helpful error
+ */
 export const validateName = (name:string, cb:(err?:string)=>void):void => {
     validate({
         input:          name,
@@ -66,6 +90,11 @@ export const validateName = (name:string, cb:(err?:string)=>void):void => {
     }, cb);
 };
 
+/**
+ * Validates custom map name
+ * @param name  custom map name input
+ * @param cb    callback with helpful error
+ */
 export const validateMapName = (name:string, cb:(err?:string)=>void):void => {
     validate({
         input:          name,
@@ -75,15 +104,22 @@ export const validateMapName = (name:string, cb:(err?:string)=>void):void => {
     }, cb);
 };
 
+/**
+ * 
+ * @param username  account username input
+ * @param password  account password input
+ * @param cb        callback with helpful error
+ */
 export const validateAccount = (username:string, password:string, cb:(err?:string)=>void):void => {
     validateUsername(username, err => {
-        if(!err){
+        if(!err)
             validatePassword(password, cb);
-        }
-        else cb(err);
+        else
+            cb(err);
     });
 };
 
+// export as an object
 export const Validator = {
     validateUsername, validatePassword, validateName, validateMapName, validateAccount
 };

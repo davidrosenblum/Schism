@@ -8,7 +8,7 @@ build/
 certs/
 
 # ignore built client
-public/static/build
+public/build
 
 # ignore local art files
 docs/*.fla
