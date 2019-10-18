@@ -5,6 +5,10 @@ import { UserUpdater } from "../users/UserUpdater";
 import { Validator } from "../utils/Validator";
 
 class PlayersControllerType{
+    /**
+     * Handles player list request
+     * @param user  requesting user
+     */
     public processPlayerList(user:User):void{
         // must be logged in
         if(!user.account){
@@ -25,6 +29,11 @@ class PlayersControllerType{
             });
     }
 
+    /**
+     * Handles player create request
+     * @param user      requesting user
+     * @param param1    request body
+     */
     public processPlayerCreate(user:User, {name="", archetype=1}):void{
         // request body must have name and archetype
         if(!name || !archetype){
@@ -68,6 +77,11 @@ class PlayersControllerType{
         });
     }
 
+    /**
+     * Handles player delete request
+     * @param user      requesting user 
+     * @param param1    request body 
+     */
     public processPlayerDelete(user:User, {name=""}):void{
         // request body must have name
         if(!name){
@@ -95,6 +109,11 @@ class PlayersControllerType{
             });
     }
 
+    /**
+     * Handles player select request
+     * @param user      requesting user
+     * @param param1    request body 
+     */
     public processPlayerSelect(user:User, {name=""}):void{
         // request body must have name
         if(!name){
@@ -117,6 +136,7 @@ class PlayersControllerType{
             return;
         }
 
+        // get player data from database
         DBPlayers.findPlayer(user.accountId, name)
             .then(playerDoc => {
                 // success - create player and respond
@@ -130,4 +150,7 @@ class PlayersControllerType{
     }
 }
 
+/**
+ * Players Controller singleton
+ */
 export const PlayersController = new PlayersControllerType();

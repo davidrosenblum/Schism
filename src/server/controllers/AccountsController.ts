@@ -5,10 +5,18 @@ import { UserUpdater } from "../users/UserUpdater";
 class AccountsControllerType{
     private _accounts:Map<string, User>; // username = user
 
+    /**
+     * Constructs an Account Controller object
+     */
     constructor(){
         this._accounts = new Map();
     }
 
+    /**
+     * Handles login requests
+     * @param user      requesting user
+     * @param param1    request body
+     */
     public processLogin(user:User, {username="", password="", version=""}):void{
         // request body must have username, password, and version
         if(!username || !password || !version){
@@ -17,11 +25,10 @@ class AccountsControllerType{
             return;
         }
 
-        // validate version?
+        // validate client version?
 
         // must not be logged in
         if(user.account){
-            // already logged in
             UserUpdater.error(user, "login", "Already logged in.");
             return;
         }
@@ -47,15 +54,18 @@ class AccountsControllerType{
             });
     }
 
+    /**
+     * Handles logout requests
+     * @param user  requesting user
+     */
     public processLogout(user:User):void{
         // must be logged in
         if(!user.account){
-            // not logged in
             UserUpdater.notLoggedInError(user, "logout");
             return;
         }
 
-        this.forceLogout(user.username);        // force logout
+        this.forceAvailable(user.username);     // force account to be open
         user.account = null;                    // delete account from user
 
         // leave current map 
@@ -74,13 +84,25 @@ class AccountsControllerType{
         UserUpdater.loggedOut(user)
     }
 
-    public forceLogout(username:string):boolean{
+    /**
+     * Forces the account to be available
+     * @param username 
+     */
+    public forceAvailable(username:string):boolean{
         return this._accounts.delete(username);
     }
 
+    /**
+     * Gets a user object by username
+     * @param username finds user with this username
+     * @returns the user with the given username
+     */
     public getUserFromUsername(username:string):User{
         return this._accounts.get(username);
     }
 }
 
+/**
+ * Account Controller singleton
+ */
 export const AccountsController = new AccountsControllerType();
