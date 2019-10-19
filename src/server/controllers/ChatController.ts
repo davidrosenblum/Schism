@@ -37,6 +37,10 @@ class ChatControllerType{
             case "/killme":
                 this.processKillMe(user);
                 break;
+                
+            case "/god":
+                this.processGodMode(user);
+                break;
 
             default:
                 UserUpdater.chat(user, `Invalid command ${args[0]}.`);
@@ -171,6 +175,22 @@ class ChatControllerType{
         
         // kill the user's player
         user.player.kill();
+    }
+
+    /**
+     * Handles "god" requests (god mode)
+     * @param user  requesting user
+     */
+    private processGodMode(user:User):void{
+        // enforce access level privilege
+        if(user.accessLevel < 3){
+            UserUpdater.chat(user, "Privilege error.");
+            return;
+        }
+
+        // toggle invulnerability
+        user.player.invulnerable = !user.player.invulnerable;
+        UserUpdater.chat(user, `God mode ${user.player.invulnerable ? "enabled" : "disabled"}`);
     }
 }
 
