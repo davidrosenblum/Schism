@@ -1,23 +1,45 @@
-import { MapFx } from "./MapFx";
-import { MapFxData } from "../data/Payloads";
+import { AssetsManager } from "./AssetsManager";
+import { AnimationLibrary, AnimationLoader } from "../gfx/AnimationLoader";
+import { AnimatedSpriteParams, AnimatedSprite } from "../gfx/AnimatedSprite";
 
-const fxs:{[fxType:string]: string} = {
-    "explosion": null
-};
-
-interface Params{
+export interface MapFxParams extends AnimatedSpriteParams{
     id:string;
     width:number;
     height:number;
-    x?:number;
-    y?:number
+    duration:number;
 }
 
+interface FxPartialData{
+    imageSrc:string;
+    animations:AnimationLibrary;
+}
+
+const fxTypes:{[fxType:string]: ()=>FxPartialData} = {
+    "levelup": () => ({
+        imageSrc: AssetsManager.getImageSrc("fx_levelup"),
+        animations: AnimationLoader.loadJson(AssetsManager.getAnimJson("fx_levelup"))
+    }),
+    "rez": () => ({
+        imageSrc: AssetsManager.getImageSrc("fx_rez"),
+        animations: AnimationLoader.loadJson(AssetsManager.getAnimJson("fx_rez"), {"rez": {frameCount: 90}})
+    }),
+};
+
 export class MapFxFactory{
-    public static create(type:string, params:Params):MapFx{
-        if(type in fxs){
-            return new MapFx({...params, imageSrc: fxs[type]});
-        }
-        return null;
+    public static create(type:string, params:MapFxParams):AnimatedSprite{
+        if(type in fxTypes === false)
+            return null;
+
+        const {imageSrc, animations} = fxTypes[type]();
+
+        const fx:AnimatedSprite = new AnimatedSprite({
+            ...params,
+            imageSrc,
+            animations
+        });
+
+        fx.playAnimation(type);
+
+        return fx;
     }
 }

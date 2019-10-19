@@ -1,10 +1,10 @@
 import { GameEntity } from "./GameEntity";
 import { GameEntityFactory } from "./GameEntityFactory";
-import { MapFx } from "./MapFx";
 import { MapTileFactory } from "./MapTileFactory";
 import { store } from "../Client";
 import { setTargetData } from "../actions/GameStatsActions";
 import { MapJoinData } from "../data/Payloads";
+import { AnimatedSprite } from "../gfx/AnimatedSprite";
 import { Box } from "../gfx/Box";
 import { CollisionGrid } from "../gfx/CollisionGrid";
 import { Object2DContainer } from "../gfx/Object2DContainer";
@@ -16,6 +16,7 @@ import { Scroller } from "../gfx/Scroller";
 import { MapFxFactory } from "./MapFxFactory";
 import { GameSocket } from "./GameSocket";
 import { requestAbilityCast } from "../requests/AbilityRequests";
+
 
 export const CANVAS_WIDTH:number = 960;
 export const CANVAS_HEIGHT:number = 540;
@@ -32,7 +33,7 @@ class GameManagerType{
     private _collisionGrid:CollisionGrid;
     private _ents:Map<string, GameEntity>;
     private _objects:Map<string, any>;
-    private _fxs:Map<string, MapFx>;
+    private _fxs:Map<string, AnimatedSprite>;
     private _player:GameEntity;
     private _target:GameEntity;
     private _ready:boolean;
@@ -162,10 +163,10 @@ class GameManagerType{
             this._ents.delete(id);
             ent.remove();
 
-            if(ent === this._player)
+            if(this._player && ent === this._player)
                 this._player = null;
 
-            if(ent === this._target)
+            if(this._target && ent === this._target)
                 this.selectTarget(null);
 
             return true;
@@ -182,6 +183,7 @@ class GameManagerType{
         const ent:GameEntity = this._ents.get(data.id);
         if(ent){
             ent.setState(data);
+            this.scene.depthSort();
             return true;
         }
         return false;
@@ -214,12 +216,29 @@ class GameManagerType{
     }
 
     public createFx(data:any):void{
-        const fx:MapFx = MapFxFactory.create(data.type, data);
-        if(fx){
-            this._fxs.set(fx.fxId, fx);
-            this.scene.addChild(fx);
-            fx.playAnimation("fx");
-        }
+        const target:AnimatedSprite = this._ents.get(data.targetId);
+        if(!target)
+            return;
+        
+        const fx:AnimatedSprite = MapFxFactory.create(
+            data.type,
+            {...data, width: target.drawBox.width, height: target.drawBox.height}
+        );
+
+        if(!fx)
+            return;
+
+        this._fxs.set(data.id, fx);
+        target.addChild(fx);
+
+        fx.onAnimFinish = (evt) => {
+            if(evt.anim === data.type){
+                this._fxs.delete(data.id);
+                fx.remove();
+                fx.onAnimFinish = null;
+            }
+        };
+        fx.playAnimation(data.type);
     }
 
     private selectTarget(ent:GameEntity):void{
@@ -230,10 +249,16 @@ class GameManagerType{
             store.dispatch(setTargetData(ent.getState()));
 
             ent.beforeDraw = (ctx, ox, oy) => {
-                const {x, y, width, height} = ent.drawBox;
+                const pfaction:string = this._player ? this._player.getState().faction : "";
+
+                const x:number = ent.drawBox.x + ox - 5;
+                const y:number = ent.drawBox.y + oy - 5;
+                const w:number = ent.drawBox.width + 10;
+                const h:number = ent.drawBox.height + 10;
+
                 ctx.save();
-                ctx.strokeStyle = ent.getState().faction === this._player.getState().faction ? "green" : "red";
-                ctx.strokeRect(ox + x - 4, oy + y + 6, width + 8, height - 6);
+                ctx.strokeStyle = (ent.getState().faction === pfaction) ? "green" : "red";
+                ctx.strokeRect(x, y, w, h);
                 ctx.restore();
             };
         }

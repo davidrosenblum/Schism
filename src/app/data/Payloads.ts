@@ -57,9 +57,7 @@ export interface UnitState{
 export interface MapFxData{
     id:string;
     type:string;
-    x:number;
-    y:number;
+    targetId:string;
     width:number;
     height:number;
-    duration:number;
 };
