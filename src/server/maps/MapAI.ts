@@ -4,20 +4,23 @@ import { Facing } from "../entities/GameObject";
 import { Object2D } from "../entities/Object2D";
 import { NPC } from "../entities/NPC";
 import { Unit } from "../entities/Unit";
+import { Clock } from "../utils/Clock";
 
 export class MapAI{
     private _map:MapInstance;
     private _looping:boolean;
     private _timeoutId:NodeJS.Timeout;
+    private _clock:Clock;
 
     /**
      * Constructs a Map AI object
      * @param map   map to simulate 'intelligence' for
      */
     constructor(map:MapInstance){
-        this._map =         map;                    // the map 
-        this._looping =     false;                  // async loop active?
-        this._timeoutId =   null;                   // current timeout id
+        this._map =         map;            // the map 
+        this._looping =     false;          // async loop active?
+        this._timeoutId =   null;           // async loop id
+        this._clock =       new Clock();    // delta clock
     }
 
     /**
@@ -25,10 +28,10 @@ export class MapAI{
      * (stops any running one)
      * @param interval  delay between iterations (ms)
      */
-    public startAsyncLoop(interval:number):void{
+    public startAsyncLoop():void{
         this.stopAsyncLoop();       // stop async loop (if in one)
         this._looping = true;       // looping true
-        this.asyncLoop(interval);   // start async loop
+        this.asyncLoop();           // start async loop
     }
 
     /**
@@ -47,13 +50,18 @@ export class MapAI{
      * Performs a game loop iteration and, if valid, will asychronously 'recurse'
      * @param interval  delay between iterations (ms)
      */
-    private asyncLoop(interval:number):void{
+    private asyncLoop():void{
         // step and async do next step
+        const delta:bigint = this._clock.getDelta();
+
+        // eventually use delta with this
         this.step();
+
+        // schedule next step
         this._timeoutId = setTimeout(() => {
             if(this._looping)
-                this.asyncLoop(interval);
-        }, interval);
+                this.asyncLoop();
+        }, 60); // replace this later with ticks
     }
 
     /**
@@ -75,12 +83,16 @@ export class MapAI{
      */
     private stepUnit(npc:NPC, units:Unit[]):void{
         // find target if no target or can't see target anymore
-        if(!npc.target || (npc.target && !npc.canSeeTarget))
-            npc.target = this.findTarget(npc, units);
+        if(!npc.target || (npc.target && (!npc.canSeeTarget || npc.target.isDead)))
+            npc.target = this.findTarget(npc, units); 
 
         // if no target could be found, bail
-        if(!npc.target)
+        if(!npc.target){
+            // idle because no longer in combat or moving torwards a target
+            if(npc.anim !== "idle")
+                npc.anim = "idle";
             return;
+        }
 
         // move towards target if not in range
         if(!npc.inRange(npc.target, npc.prefRange))
@@ -106,21 +118,23 @@ export class MapAI{
         if(npc.isRightOf(npc.target)){
             // move left
             npc.setState({x: npc.x - npc.moveSpeed}, false);
-            facing = "left";
 
             // undo move on collision
             if(this.checkCollision(npc))
                 npc.setState({x: ox}, false);
+            else
+                facing = "left";
         }
         else if(npc.isLeftOf(npc.target)){
             // move right
             npc.setState({x: npc.x + npc.moveSpeed}, false);
-            facing = "right";
 
             // undo move on collision
             if(this.checkCollision(npc)){
                 npc.setState({x: ox}, false);
             }
+            else
+                facing = "right";
         }
 
         if(npc.isBelow(npc.target)){
@@ -140,14 +154,14 @@ export class MapAI{
                 npc.setState({y: oy}, false);
         }
 
-        if(npc.x !== ox || npc.y !== oy){
+        if(npc.x !== ox || npc.y !== oy || npc.facing !== facing){
             // change state if movement occurred (implies possible animation/facing change)
             npc.setState({x: npc.x, y: npc.y, anim: "run", facing});
         }
         else{
             // didn't move, set anim to idle
-            if(npc.facing !== facing || npc.anim !== "idle")
-                npc.setState({anim: "idle", facing});
+            if(npc.anim === "run")
+                npc.anim = "idle";
         }
     }
 
