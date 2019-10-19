@@ -1,12 +1,11 @@
 import { AssetsManager } from "./AssetsManager";
 import { AnimationLibrary, AnimationLoader } from "../gfx/AnimationLoader";
-import { AnimatedSpriteParams, AnimatedSprite } from "../gfx/AnimatedSprite";
+import { AnimatedSprite } from "../gfx/AnimatedSprite";
 
-export interface MapFxParams extends AnimatedSpriteParams{
+export interface MapFxParams{
     id:string;
     width:number;
     height:number;
-    duration:number;
 }
 
 interface FxPartialData{

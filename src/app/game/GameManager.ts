@@ -3,7 +3,7 @@ import { GameEntityFactory } from "./GameEntityFactory";
 import { MapTileFactory } from "./MapTileFactory";
 import { store } from "../Client";
 import { setTargetData } from "../actions/GameStatsActions";
-import { MapJoinData } from "../data/Payloads";
+import { MapJoinData, MapFxData, UnitState } from "../data/Payloads";
 import { AnimatedSprite } from "../gfx/AnimatedSprite";
 import { Box } from "../gfx/Box";
 import { CollisionGrid } from "../gfx/CollisionGrid";
@@ -124,7 +124,7 @@ class GameManagerType{
         this._fxs.clear();
     }
 
-    public createEntity(data:any):boolean{
+    public createEntity(data:UnitState):boolean{
         if(!this._ready){
             this._taskBuffer.push(() => this.createEntity(data));
             return;
@@ -215,21 +215,38 @@ class GameManagerType{
         }
     }
 
-    public createFx(data:any):void{
+    public createFx(data:MapFxData):void{
+        if(!this._ready){
+            this._taskBuffer.push(() => this.createFx(data));
+            return;
+        }
+
         const target:AnimatedSprite = this._ents.get(data.targetId);
         if(!target)
             return;
+
+        const {
+            id, type, width, height, sticky
+        } = data;
         
-        const fx:AnimatedSprite = MapFxFactory.create(
-            data.type,
-            {...data, width: target.drawBox.width, height: target.drawBox.height}
-        );
+        const fx:AnimatedSprite = MapFxFactory.create(type, {
+            id,
+            width: target.drawBox.height * (width / height),
+            height: target.drawBox.height
+        });
 
         if(!fx)
             return;
 
         this._fxs.set(data.id, fx);
-        target.addChild(fx);
+        
+        if(!sticky){
+            console.log("Not sticky")
+            fx.drawBox.setPosition(target.drawBox.x, target.drawBox.y);
+            this.scene.addChild(fx);
+        }
+        else
+            target.addChild(fx);
 
         fx.onAnimFinish = (evt) => {
             if(evt.anim === data.type){

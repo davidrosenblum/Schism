@@ -7,6 +7,7 @@ export type MapFxType = (
 export interface MapFxParams{
     type:MapFxType;
     targetId:string;
+    sticky:boolean;
     width:number;
     height:number;
 }
@@ -15,6 +16,7 @@ export interface MapFxState{
     id:string;
     type:MapFxType;
     targetId:string;
+    sticky:boolean;
     width:number;
     height:number;
 }
@@ -25,6 +27,7 @@ export class MapFxData{
     private _id:string;
     private _type:MapFxType;
     private _targetId:string;
+    private _sticky:boolean;
     private _width:number;
     private _height:number;
 
@@ -35,12 +38,13 @@ export class MapFxData{
      */
     constructor(params:MapFxParams){
         const {
-            type, targetId, width, height
+            type, targetId=null, sticky, width, height
         } = params;
 
         this._id = MapFxData.tokens.nextToken();
         this._type = type;
         this._targetId = targetId;
+        this._sticky = sticky;
         this._width = width;
         this._height = height;
     }
@@ -51,11 +55,11 @@ export class MapFxData{
      */
     public getState():MapFxState{
         const {
-            id, type, targetId, width, height
+            id, type, targetId, sticky, width, height
         } = this;
 
         return {
-            id, type, targetId, width, height
+            id, type, targetId, sticky, width, height
         };
     }
 
@@ -84,6 +88,14 @@ export class MapFxData{
     }
 
     /**
+     * Getter for if the effect sticks to the target or not.
+     * @returns Is sticky or not.
+     */
+    public get sticky():boolean{
+        return this._sticky;
+    }
+
+    /**
      * Getter for the width.
      * @returns The width.
      */
@@ -96,6 +108,6 @@ export class MapFxData{
      * @returns The height.
      */
     public get height():number{
-        return this._width;
+        return this._height;
     }
 }
