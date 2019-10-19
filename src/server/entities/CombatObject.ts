@@ -75,6 +75,7 @@ export class CombatObject extends GameObject{
     private _resistance:CombatStat;
     private _defense:CombatStat;
 
+    public invulnerable:boolean;
     public onCombatUpdate:(evt:CombatEvent)=>void;
     public onDeath:(evt:DeathEvent)=>void;
 
@@ -94,6 +95,7 @@ export class CombatObject extends GameObject{
         this._resistance =  new CombatStat(resistance, CombatObject.RESISTANCE_CAP);
         this._defense =     new CombatStat(defense, CombatObject.DEFENSE_CAP);
 
+        this.invulnerable = false;
         this.onCombatUpdate = null;
         this.onDeath = null;
 
@@ -188,7 +190,8 @@ export class CombatObject extends GameObject{
      * @param amount damage to take
      */
     public takeAbsoluteDamage(amount:number):void{
-        this.health.modify(-amount);
+        if(!this.invulnerable)
+            this.health.modify(-amount);
     }
 
     /**
@@ -298,5 +301,13 @@ export class CombatObject extends GameObject{
      */
     public get defense():CombatStat{
         return this._defense;
+    }
+
+    /**
+     * Getter for if this unit is dead or not
+     * @returns death status
+     */
+    public get isDead():boolean{
+        return this.health.current <= 0;
     }
 }

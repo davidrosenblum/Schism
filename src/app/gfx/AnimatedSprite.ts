@@ -13,6 +13,8 @@ export class AnimatedSprite extends Sprite{
     private _currFrame:number;
     private _currAnim:string;
     private _framesLeft:number;
+
+    public onAnimFinish:(evt:{target:AnimatedSprite, anim:string})=>void;
     
     constructor(params:AnimatedSpriteParams){
         super(params);
@@ -21,6 +23,8 @@ export class AnimatedSprite extends Sprite{
         this._currFrame = 0;
         this._currAnim = null;
         this._framesLeft = 0;
+
+        this.onAnimFinish = null;
 
         const {
             animations, defaultAnimation
@@ -50,25 +54,38 @@ export class AnimatedSprite extends Sprite{
 
         const anim:AnimationKeyFrame = this.currAnimFrame;
 
-        // const sx:number =  anim.width / this.drawBox.width;
-        // const sy:number = anim.height / this.drawBox.height;
+        const arDraw:number = this.drawBox.aspectRatio;
+        const arAnim:number = anim.width / anim.height;
 
         let x:number = this.drawBox.x + offsetX;
         let y:number = this.drawBox.y + offsetY;
-        // let w:number = this.drawBox.width * sx;
-        // let h:number = this.drawBox.height * sy;
+        let w:number = this.drawBox.width;
+        let h:number = this.drawBox.height;
 
-        // if(w !== this.drawBox.width)
-        //     x -= (this.drawBox.width - w) / 2;
+        if(arDraw !== arAnim){
+            if(anim.width < anim.height){
+                // tall animation
+                w = this.drawBox.height * arAnim;
+                h = this.drawBox.height;
+            }
+            else{
+                // wide animation
+                w = this.drawBox.width;
+                h = this.drawBox.width / arAnim;
+            }
 
-        // if(h !== this.drawBox.height)
-        //     y -= Math.abs(this.drawBox.height - h);
+            if(w !== this.drawBox.width)
+                w -= Math.abs(w - this.drawBox.width) / 2;
+
+            if(h !== this.drawBox.height)
+                h -= Math.abs(h - this.drawBox.height);
+        }
 
         ctx.save();
         ctx.globalAlpha = this.alpha;
         ctx.drawImage(
             this.image, anim.x, anim.y, anim.width, anim.height,
-            x, y, this.drawBox.width, this.drawBox.height
+            x, y, w, h
         );
         ctx.restore();
 
@@ -83,11 +100,23 @@ export class AnimatedSprite extends Sprite{
         if(this._framesLeft <= 0){
             this.nextFrame();
             this.resetFramesLeft();
+
+            if(this.currentFrame === (this.currAnimFrames.length - 1))
+                this.triggerAnimFinish();
         }
     }
 
     private resetFramesLeft():void{
         this._framesLeft = this.currAnimFrame.frames;
+    }
+
+    private triggerAnimFinish():void{
+        if(this.onAnimFinish){
+            this.onAnimFinish({
+                target: this,
+                anim: this.currentAnimation
+            });
+        }
     }
 
     public nextFrame():void{

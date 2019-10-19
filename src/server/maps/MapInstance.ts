@@ -1,15 +1,17 @@
 import { MapAI } from "./MapAI";
+import { MapCollision } from "./MapCollision";
+import { MapFxData, MapFxState } from "./MapFxData";
+import { MapFxFactory } from "./MapFxFactory";
 import { MapNPCs } from "./MapNPCs";
 import { MapPathFinder } from "./MapPathFinder";
 import { CombatEvent, DeathEvent } from "../entities/CombatObject";
-import { UpdateEvent, Object2DState } from "../entities/Object2D";
+import { UpdateEvent } from "../entities/Object2D";
 import { NPC } from "../entities/NPC";
 import { NpcFaction } from "../entities/NPCFactory";
 import { Unit, UnitUpdate, UnitState } from "../entities/Unit";
 import { User } from "../users/User";
 import { UserUpdater } from "../users/UserUpdater";
 import { TokenGenerator } from "../utils/TokenGenerator";
-import { MapCollision } from "./MapCollision";
 
 export type MapType = "Test";
 
@@ -56,6 +58,7 @@ export type MapEmptyEvent = {target:MapInstance};
 export class MapInstance{
     public static readonly TILE_SCALE:number = 64;
     public static readonly REZ_TIMEOUT:number = 10 * 1000;
+    public static readonly REGEN_INTERVAL:number = 2 * 1000;
 
     private static readonly tokens:TokenGenerator = new TokenGenerator(8);
 
@@ -71,6 +74,8 @@ export class MapInstance{
     private _users:Map<string, User>;
     private _units:Map<string, Unit>;
     private _objects:Map<string, any>;
+    private _effects:Map<string, MapFxData>;
+    private _regenInterval:NodeJS.Timeout;
     private _ai:MapAI;
     private _collision:MapCollision;
     private _pathFinder:MapPathFinder;
@@ -98,7 +103,7 @@ export class MapInstance{
         this._users =   new Map();
         this._units =   new Map();
         this._objects = new Map();
-
+        this._effects = new Map();
         
         this._ai =          new MapAI(this);
         this._collision =   new MapCollision(this._layout[1]);
@@ -107,6 +112,7 @@ export class MapInstance{
         this.onEmpty = null;
 
         MapNPCs.populateNPCs(this, tileLayout[3]);
+        this.startRegenCycle();
     }
 
     public chatAll(chat:string, from?:string):void{
@@ -130,10 +136,11 @@ export class MapInstance{
         }
 
         this._users.set(user.id, user);
-        this.addUnit(user.player, this._playerSpawn);
-        user.player.onDeath = evt => this.onPlayerDeath(evt, user);
 
         if(cb) cb(null, this.getMapJoinData());
+
+        this.addUnit(user.player, this._playerSpawn);
+        user.player.onDeath = evt => this.onPlayerDeath(evt, user);
 
         this.chatAll(`${user.player.name} connected.`);
     }
@@ -167,7 +174,11 @@ export class MapInstance{
         unit.onCombatUpdate = this.onCombatUpdate;
         unit.onDeath = this.onUnitDeath;
 
-        this._users.forEach(u => UserUpdater.entityCreated(u, unit.getState()));
+        const unitState:UnitState = unit.getState();
+        this._users.forEach(u => UserUpdater.entityCreated(u, unitState));
+
+        // if(unit.type === "player")
+        //     this.createEffect(MapFxFactory.create("rez", unit.id));
         return true;
     }
 
@@ -197,6 +208,18 @@ export class MapInstance{
         unit.y = row * MapInstance.TILE_SCALE - unit.height;
 
         return true;
+    }
+
+    public createEffect(fx:MapFxData):boolean{
+        if(!this._effects.has(fx.id)){
+            this._effects.set(fx.id, fx);
+            setTimeout(() => this._effects.delete(fx.id));
+
+            const fxState:MapFxState = fx.getState();
+            this._users.forEach(user => UserUpdater.createFx(user, fxState));
+            return true;
+        }
+        return false;
     }
 
     public hasUser(user:User):boolean{
@@ -233,10 +256,13 @@ export class MapInstance{
 
         setTimeout(() => {
             if(this && this._users.has(user.id)){
+                this.addUnit(user.player, this._playerSpawn);
+                this.createEffect(MapFxFactory.create("rez", user.player.id));
+                this.chatAll(`${target.name} has been revived.`);
+
                 user.player.health.refill();
                 user.player.mana.refill();
-                this.addUnit(user.player, this._playerSpawn);
-                this.chatAll(`${target.name} has been revived.`);
+                user.player.setState({facing: "right", anim: "idle"});
             }
         }, MapInstance.REZ_TIMEOUT);
     }
@@ -262,10 +288,21 @@ export class MapInstance{
         return false;
     }
 
+    private startRegenCycle():void{
+        this._regenInterval = setInterval(() => {
+            this._units.forEach(unit => {
+                unit.health.modifyPercent(0.01);
+                unit.mana.modifyPercent(0.01);
+            });
+        }, MapInstance.REGEN_INTERVAL);
+    }
+
     public destroy():void{
+        clearInterval(this._regenInterval);
         this._users.clear();
         this._units.clear();
         this._objects.clear();
+        this._effects.clear();
         this.onEmpty = null;
         this.ai.destroy();
         this._ai = null

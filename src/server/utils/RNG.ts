@@ -8,7 +8,6 @@ export const rng = (min:number, max:number):number => {
     return Math.random() * (max - min) + min;
 };
 
-
 /**
  * Generates a random float within the given range with a controlled amount of decimal places
  * @param min           smallest in range (inclusive)

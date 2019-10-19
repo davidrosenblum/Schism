@@ -1,5 +1,6 @@
 import { PlayerSchema, DBPlayers } from "../database/DBPlayers";
 import { Player, PlayerEvent, PlayerArchetype } from "../entities/Player";
+import { MapFxFactory } from "../maps/MapFxFactory";
 import { User } from "../users/User";
 import { UserUpdater } from '../users/UserUpdater';
 
@@ -48,6 +49,10 @@ const onPlayerUpdate = (user:User, evt:PlayerEvent):void => {
     // send optional chat update
     if(message)
         UserUpdater.chat(user, message);
+
+    // levelup effect
+    if(evt.data.level)
+        user.map.createEffect(MapFxFactory.create("levelup", target.id));
 
     // send stats update to the owner 
     UserUpdater.statsUpdated(user, target.id, target.getStats());

@@ -8,7 +8,8 @@ import { GameManager } from "../game/GameManager";
 export const processServerData = (payload:any):void => {
     const {type, data={}} = payload;
 
-    console.log(payload);
+    if(type !== "ent-update" && type !== "stats-update")
+        console.log(payload);
 
     switch(type){
         case "login":

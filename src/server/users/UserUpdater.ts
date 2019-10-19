@@ -5,6 +5,7 @@ import { GameObjectUpdate } from "../entities/GameObject";
 import { PlayerState } from "../entities/Player";
 import { UnitState } from "../entities/Unit";
 import { MapSummary, MapJoinData } from "../maps/MapInstance";
+import { MapFxState } from "../maps/MapFxData";
 
 export class UserUpdater{
     /**
@@ -138,6 +139,15 @@ export class UserUpdater{
      */
     public static chat(user:User, chat:string, from?:string):void{
         user.sendData("chat", {chat, from});
+    }
+
+    /**
+     * Sends the expected map effect update
+     * @param user  user object
+     * @param state effect state
+     */
+    public static createFx(user:User, state:MapFxState):void{
+        user.sendData("map-fx", state);
     }
 
     /**

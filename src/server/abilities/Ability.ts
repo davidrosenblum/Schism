@@ -17,7 +17,7 @@ export type AbilityType = (
     "knight1" | "knight2" | "knight3" | "knight4" |
     "ranger1" | "ranger2" | "ranger3" | "ranger4" |
     "alchemist1" | "alchemist2" | "alchemist3" | "alchemist4" |
-    "lich1" | "lich2"
+    "ghoul1" | "graveknight1" | "lich1" | "lich2"
 );
 
 export interface AbilityState{
@@ -40,6 +40,8 @@ export interface AbilityConfig{
 }
 
 export class Ability{
+    public static readonly CAST_DURATION:number = 2 * 1000;
+
     private _config:AbilityConfig;
     private _ready:boolean;
     
@@ -80,9 +82,16 @@ export class Ability{
                 // valid cast
                 this._ready = false;                                                // ability no longer ready
                 caster.lookAt(mainTarget);                                          // caster looks at target
+                caster.anim = "attack";                                             // attack animation
                 caster.mana.modify(-this.manaCost);                                 // consume mana
                 this.affectTargets(caster, mainTarget, allUnits);                   // start affecting targets
-                setTimeout(() => this.forceRecharge(), this.recharge * 1000);       // being recharge
+                setTimeout(() => this.forceRecharge(), this.recharge * 1000);       // begin cooldown
+
+                // reset animation when cast complete
+                setTimeout(() => {
+                    if(caster.anim === "attack")
+                        caster.anim = "idle";
+                }, Ability.CAST_DURATION);
 
                 if(cb) cb();
             }

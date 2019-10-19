@@ -1,0 +1,43 @@
+﻿{"frames": {
+
+"levelup instance 10000":
+{
+	"frame": {"x":0,"y":0,"w":64,"h":138},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":7,"y":0,"w":71,"h":138},
+	"sourceSize": {"w":71,"h":138}
+},
+"levelup instance 10001":
+{
+	"frame": {"x":0,"y":138,"w":71,"h":138},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":71,"h":138},
+	"sourceSize": {"w":71,"h":138}
+},
+"levelup instance 10002":
+{
+	"frame": {"x":0,"y":276,"w":62,"h":138},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":9,"y":0,"w":71,"h":138},
+	"sourceSize": {"w":71,"h":138}
+},
+"levelup instance 10003":
+{
+	"frame": {"x":62,"y":276,"w":62,"h":138},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":9,"y":0,"w":71,"h":138},
+	"sourceSize": {"w":71,"h":138}
+}},
+"meta": {
+	"app": "Adobe Animate",
+	"version": "19.2.1.408",
+	"image": "art3.png",
+	"format": "RGBA8888",
+	"size": {"w":128,"h":512},
+	"scale": "1"
+}
+}

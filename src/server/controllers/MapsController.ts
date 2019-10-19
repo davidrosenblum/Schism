@@ -198,7 +198,7 @@ export class MapsControllerType{
         if(map){
             // map created
             map.onEmpty = this.onMapEmpty;      // attach on empty listener
-            map.ai.startAsyncLoop(60);          // begin map AI loop
+            map.ai.startAsyncLoop();            // begin map AI loop
             this._maps.set(map.id, map);        // store map
             if(cb) cb(null, map);               // success callback
         }

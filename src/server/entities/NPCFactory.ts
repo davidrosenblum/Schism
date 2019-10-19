@@ -49,6 +49,7 @@ const npcTypes:Map<NpcType, PartialNpcParams> = new Map([
             defense:    0.00,
             width:      48,
             height:     83,
+            abilities:  ["ghoul1"]
         } as PartialNpcParams
     ],
     [
@@ -64,6 +65,7 @@ const npcTypes:Map<NpcType, PartialNpcParams> = new Map([
             defense:    0.05,
             width:      64,
             height:     110,
+            abilities:  ["graveknight1"]
         } as PartialNpcParams
     ],
     [
@@ -110,7 +112,12 @@ export class NPCFactory{
         } = options
 
         // NPC params missing the values provided by options
-        const params:PartialNpcParams = npcTypes.get(type);;
+        const params:PartialNpcParams = npcTypes.get(type);
+
+        // remove bad options
+        for(let opt in options)
+            if(typeof options[opt] === "undefined")
+                delete options[opt];
 
         // create the NPC and splice together the constructor parameters
         return new NPC({

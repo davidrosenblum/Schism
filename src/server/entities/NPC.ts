@@ -51,7 +51,7 @@ export class NPC extends Unit{
             level, rank, prefRange
         } = params;
         
-        this._level = level;
+        this._level = level || 1;
         this._rank = rank;
         this._prefRange = prefRange; 
         this.target = null;
