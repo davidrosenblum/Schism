@@ -70,4 +70,8 @@ export class Box implements Point{
     public get centerY():number{
         return this.y + this.height /  2;
     }
+
+    public get aspectRatio():number{
+        return this.width / this.height;
+    }
 }
