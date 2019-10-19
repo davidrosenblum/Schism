@@ -17,7 +17,6 @@ export interface MapListItem{
 export interface MapJoinData{
     id:string;
     tileLayout:number[][][];
-    player:UnitState;
     units:UnitState[];
     objects:{id:string, type:string, x:number, y:number, width:number, height:number}[];
 }
@@ -33,6 +32,7 @@ export interface UnitState{
     name:string;
     type:string;
     faction:string;
+    ownerId:string;
     level:number;
     health:number;
     healthCap:number;
@@ -58,6 +58,7 @@ export interface MapFxData{
     id:string;
     type:string;
     targetId:string;
+    sticky:boolean;
     width:number;
     height:number;
 };

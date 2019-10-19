@@ -1,21 +1,21 @@
 import { MapFxData, MapFxType } from "./MapFxData";
 
 interface PartialMapFxParams{
-    type:MapFxType;
     width:number;
     height:number;
+    sticky:boolean;
 }
 
 const mapFxTypes:Map<MapFxType, PartialMapFxParams> = new Map([
     ["levelup", {
-        type: "levelup",
         width: 64,
         height: 135,
+        sticky: true
     } as PartialMapFxParams],
     ["rez", {
-        type: "rez",
         width: 64,
         height: 200,
+        sticky: false
     } as PartialMapFxParams]  
 ]);
 
@@ -31,6 +31,7 @@ export class MapFxFactory{
             return null;
 
         return new MapFxData({
+            type,
             ...mapFxTypes.get(type),
             targetId
         });

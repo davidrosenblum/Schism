@@ -65,7 +65,6 @@ export class GfxTestManager{
                 ],
                 []
             ],
-            player: this.fakePlayerData(2, 3),
             units: [
                 this.fakePlayerData(2, 3),
                 this.fakeLichData(2, 2, "idle"),
