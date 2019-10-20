@@ -52,6 +52,7 @@ export const PlayerCreate = () => {
                         value={name}
                         onChange={onName}
                         disabled={disabled}
+                        maxLength={10}
                         required
                     />
                 </div>
