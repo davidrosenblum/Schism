@@ -70,18 +70,24 @@ export class Player extends Unit{
      * @param ownerId   player's owner id (client id)
      */
     constructor(saveData:PlayerSchema, ownerId:string){
+        const {
+            w, h, hp, mp, res, def, hpBonus, mpBonus
+        } = ArchetypeStats[saveData.archetype];
+        
+        const levels:number = saveData.level - 1;
+
         super({
             ownerId,
             name:           saveData.name,
             type:           "player",
             faction:        "Players",
-            width:          ArchetypeStats[saveData.archetype].w,
-            height:         ArchetypeStats[saveData.archetype].h,
+            width:          w,
+            height:         h,
             moveSpeed:      Player.MOVE_SPEED,
-            health:         ArchetypeStats[saveData.archetype].hp,
-            mana:           ArchetypeStats[saveData.archetype].mp,
-            resistance:     ArchetypeStats[saveData.archetype].res,
-            defense:        ArchetypeStats[saveData.archetype].def
+            health:         hp + (hpBonus * levels),
+            mana:           mp + (mpBonus * levels),
+            resistance:     res,
+            defense:        def
         });
 
         // restore attributes from saveData (database)
@@ -104,8 +110,9 @@ export class Player extends Unit{
             this._level++;
             this._xp = 0;
 
-            // boost health capacity and refill health and mana
+            // boost health/mana capacity and refill health/mana
             this.health.modifyCapacity(ArchetypeStats[this.archetype].hpBonus);
+            this.mana.modifyCapacity(ArchetypeStats[this.archetype].mpBonus);
             this.refill();
 
             // trigger player update
