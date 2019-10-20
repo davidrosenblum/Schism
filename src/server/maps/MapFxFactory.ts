@@ -7,11 +7,21 @@ interface PartialMapFxParams{
 }
 
 const mapFxTypes:Map<MapFxType, PartialMapFxParams> = new Map([
+    ["death", {
+        width: 87,
+        height: 147,
+        sticky: false
+    }],
     ["levelup", {
         width: 64,
         height: 135,
         sticky: true
     } as PartialMapFxParams],
+    ["manaburst", {
+        width: 90,
+        height: 100,
+        sticky: true
+    }],
     ["rez", {
         width: 64,
         height: 200,

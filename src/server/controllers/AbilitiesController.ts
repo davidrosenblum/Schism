@@ -31,7 +31,6 @@ class AbilitiesControllerType{
 
         // prepare target object and get all possible targets (all units)
         let target:Unit;
-        const allUnits:Unit[] = user.map.getAllUnits();
 
         //  get target object
         if(ability.targets === AbilityTargets.SELF_ONLY)
@@ -47,7 +46,7 @@ class AbilitiesControllerType{
         }
 
         // cast the ability
-        ability.cast(user.player, target, allUnits, err => {
+        ability.cast(user.player, target, user.map, err => {
             if(!err){
                 // success, send update
                 UserUpdater.abilityCasted(user, abilityName);

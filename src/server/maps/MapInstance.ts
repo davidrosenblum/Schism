@@ -242,6 +242,7 @@ export class MapInstance{
 
     private onUnitDeath = (evt:DeathEvent):void => {
         const {target} = evt;
+        this.createEffect(MapFxFactory.create("death", target.id));
         this.removeUnit(target as Unit);
 
         if(target instanceof NPC){

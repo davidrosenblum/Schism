@@ -63,6 +63,7 @@ export const AlchemistAbility3:AbilityConfig = {
     range: AbilityRange.NEAR,
     maxTargets: 16,
     recharge: 12,
+    castFx: "manaburst",
     affect: (caster, target, relationship) => {
         switch(relationship){
             case TargetRelationship.SELF:
