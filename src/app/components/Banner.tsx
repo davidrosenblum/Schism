@@ -7,7 +7,7 @@ export const Banner = () => {
         <header className="banner">
             <img
                 src={logo}
-                height={250}
+                height={225}
             />
         </header>
     );

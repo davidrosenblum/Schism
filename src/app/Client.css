@@ -1,11 +1,12 @@
 @font-face{
-    font-family: Electrolize;
+    font-family: "Electrolize";
     src: url("/fonts/Electrolize-Regular.ttf")
 }
 
 body{
+    background: linear-gradient(180deg, darkred, black) fixed 100% 100%;
     margin: 0px;
-    font-family: electrolize;
+    font-family: "Electrolize";
     font-size: 1em;
 }
 

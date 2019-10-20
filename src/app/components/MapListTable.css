@@ -1,8 +1,48 @@
-tr.map-list-item{
-    cursor: pointer;
+table.map-list-table tbody{
+    font-size: 0.9rem;;
+    max-height: 250px;
 }
 
-tr.map-list-item.selected{
-    border-top: 2px solid red;
-    border-bottom: 2px solid red;
+table.map-list-table thead th{
+    background-color: silver;
+    color: black;
+    font-weight: normal;
+}
+
+table.map-list-table tbody tr:nth-child(even){
+    background-color: #393939;
+    color: white;
+}
+
+table.map-list-table tbody tr:nth-child(odd){
+    background-color: #222222;
+    color: white;
+}
+
+
+table.map-list-table tr{
+    cursor: pointer;
+    box-sizing: border-box;
+    width: 100%;
+    height: 45px;
+    transition: 0.5s;
+}
+
+table.map-list-table td{
+    box-sizing: border-box;
+}
+
+table.map-list-table tr.map-list-item.selected{
+    border-top: 1px solid red;
+    border-bottom: 1px solid red;
+    background-color: black;
+    color: red;
+}
+
+table.map-list-table tbody tr:nth-child(odd):hover{
+    background-color: #780B0B;
+}
+
+table.map-list-table tbody tr:nth-child(even):hover{
+    background-color: #AB0D0D;
 }

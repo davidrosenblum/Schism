@@ -12,7 +12,7 @@ div.core.modal{
     background-color: gray;
     border: 1px solid black;
     border-radius: 6px;
-    box-shadow: 1px 1px 1px 1px black;
+    box-shadow: 3px 3px 4px black;
     margin: auto;
     margin-top: 100px;
     width: 400px;

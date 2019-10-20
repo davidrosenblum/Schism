@@ -24,6 +24,12 @@ export const MapListTable = (props:Props) => {
         setPassword("");
     }, [selectedMap]);
 
+    React.useEffect(() => {
+        const {list} = store.getState().mapList;
+        if(selectedMap && list && !list.find(val => val && val.id === selectedMap.id))
+            setSelectedMap(null);
+    });
+
     const onFilter = (evt:React.ChangeEvent<HTMLInputElement>) => {
         setFilter(evt.target.value.toLowerCase());
     };
@@ -33,20 +39,19 @@ export const MapListTable = (props:Props) => {
     };
 
     const onRefresh = () => {
-        requestMapList();
+        if(!store.getState().mapList.pendingJoin)
+            requestMapList();
     };
 
     const onCreate = () => {
-        if(!store.getState().mapList.pendingJoin){
+        if(!store.getState().mapList.pendingJoin)
             store.dispatch(showMapCreate());
-        }
     };
 
     const onSubmit = (evt:React.FormEvent<HTMLFormElement>) => {
         evt.preventDefault();
-        if(selectedMap){
-            requestMapJoin(selectedMap.id, password);
-        }
+        if(selectedMap)
+            requestMapJoin(selectedMap.id, password); 
     };
 
     const {pendingList, list} = store.getState().mapList;
@@ -73,23 +78,12 @@ export const MapListTable = (props:Props) => {
         );
     }
 
-    // const difficulties = Object.values(MapDifficulties).map((val, i) => {
-    //     const {difficulty, levels} = val;
-    //     const [min, max] = levels;
-
-    //     return (
-    //         <div key={i}>
-    //             {difficulty}: enemy levels {min}-{max}
-    //         </div>
-    //     )
-    // });
-
-    const filteredList = list.filter(val => {
+    const filteredList = filter ? list.filter(val => {
         return val.customName.toLowerCase().includes(filter) ||
             val.type.toLowerCase().includes(filter) ||
             val.population.toString().includes(filter) ||
             val.populationLimit.toString().includes(filter)
-    });
+    }) : list;
 
     const rows = filteredList.slice(0, 20).map((val, i) => {
         const {
@@ -100,16 +94,11 @@ export const MapListTable = (props:Props) => {
         const cname:string = `map-list-item ${selectedTr ? "selected" : ""}`.trim();
 
         return (
-            <tr key={i} className={cname} onClick={() => setSelectedMap(val)}>
+            <tr key={i} className={cname} onClick={() => setSelectedMap(selectedMap === val ? null : val)}>
                 <td>{type}</td>
                 <td>{customName}</td>
                 <td>{MapDifficulties[difficulty - 1].difficulty}</td>
-                <td>{population} / {populationLimit}</td>
-                {/* <td>
-                    <Button type="button" disabled={disabled} onClick={() => setSelectedMap(val)}>
-                        Select
-                    </Button>
-                </td> */}
+                <td>{population}/{populationLimit}</td>
             </tr>
         );
     });
@@ -119,7 +108,7 @@ export const MapListTable = (props:Props) => {
     return (
         <form onSubmit={onSubmit}>
             <div>
-                <Table>
+                <Table className="map-list-table">
                     <thead>
                         <tr>
                             <th>Map Type</th>
@@ -133,7 +122,11 @@ export const MapListTable = (props:Props) => {
                     </tbody>
                 </Table>
                 <br/>
-                <div>
+                <div className="text-center">
+                    <Button type="submit" disabled={disabled || !selectedMap}>
+                        Join
+                    </Button>
+                    &nbsp;
                     <Button type="button" disabled={disabled} onClick={onRefresh}>
                         Refresh
                     </Button>
@@ -146,40 +139,20 @@ export const MapListTable = (props:Props) => {
             <br/>
             <div>
                 {
-                    selectedMap ? (
+                    (selectedMap && selectedMap.hasPassword) ? (
                         <>
-                        <div>
-                            Do you want to join {selectedMap.customName} ({selectedMap.type})?
-                        </div>
-                        <div>
-                            {
-                                selectedMap.hasPassword ? (
-                                    <>
-                                        <br/>
-                                        <Input
-                                            type="password"
-                                            placeholder="Enter password"
-                                            value={password}
-                                            onChange={onPassword}
-                                            disabled={disabled}
-                                            required
-                                        />
-                                    </>
-                                ) : null
-                            }
-                        </div>
-                        <br/>
-                        <div>
-                            <Button type="submit" disabled={disabled}>
-                                Join
-                            </Button>
-                        </div>
+                            <div>{selectedMap.customName} is password protected.</div>
+                            <br/>
+                            <Input
+                                placeholder="Enter map password"
+                                value={password}
+                                disabled={disabled}
+                                onChange={onPassword}
+                                maxLength={15}
+                                required
+                            />
                         </>
-                    ) : (
-                        <div>
-                            Please select a map from the table below.
-                        </div>
-                    )
+                    ) : null
                 }
             </div>
             <br/>
@@ -195,6 +168,7 @@ export const MapListTable = (props:Props) => {
                     value={filter}
                     onChange={onFilter}
                     disabled={disabled}
+                    maxLength={15}
                 />
             </div>
         </form>
