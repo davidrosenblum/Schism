@@ -1,0 +1,35 @@
+﻿{"frames": {
+
+"death instance 10000":
+{
+	"frame": {"x":0,"y":0,"w":88,"h":148},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":88,"h":148},
+	"sourceSize": {"w":88,"h":148}
+},
+"death instance 10001":
+{
+	"frame": {"x":88,"y":0,"w":79,"h":120},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":0,"w":88,"h":148},
+	"sourceSize": {"w":88,"h":148}
+},
+"death instance 10002":
+{
+	"frame": {"x":167,"y":0,"w":44,"h":71},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":0,"w":88,"h":148},
+	"sourceSize": {"w":88,"h":148}
+}},
+"meta": {
+	"app": "Adobe Animate",
+	"version": "19.2.1.408",
+	"image": "art3.png",
+	"format": "RGBA8888",
+	"size": {"w":256,"h":256},
+	"scale": "1"
+}
+}

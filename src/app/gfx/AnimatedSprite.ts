@@ -74,8 +74,8 @@ export class AnimatedSprite extends Sprite{
                 h = this.drawBox.width / arAnim;
             }
 
-            if(w !== this.drawBox.width)
-                w -= Math.abs(w - this.drawBox.width) / 2;
+            // if(w !== this.drawBox.width)
+                // w -= Math.abs(w - this.drawBox.width);
 
             if(h !== this.drawBox.height)
                 h -= Math.abs(h - this.drawBox.height);
