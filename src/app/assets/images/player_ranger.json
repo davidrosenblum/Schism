@@ -1,8 +1,32 @@
 ﻿{"frames": {
 
+"left_attack instance 10000":
+{
+	"frame": {"x":0,"y":0,"w":54,"h":128},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":0,"w":59,"h":128},
+	"sourceSize": {"w":59,"h":128}
+},
+"left_attack instance 10001":
+{
+	"frame": {"x":54,"y":0,"w":59,"h":128},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":59,"h":128},
+	"sourceSize": {"w":59,"h":128}
+},
+"left_attack instance 10002":
+{
+	"frame": {"x":113,"y":0,"w":54,"h":128},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":0,"w":59,"h":128},
+	"sourceSize": {"w":59,"h":128}
+},
 "left_idle instance 10000":
 {
-	"frame": {"x":0,"y":0,"w":53,"h":128},
+	"frame": {"x":167,"y":0,"w":53,"h":128},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":53,"h":128},
@@ -10,7 +34,7 @@
 },
 "left_idle instance 10001":
 {
-	"frame": {"x":53,"y":0,"w":53,"h":128},
+	"frame": {"x":220,"y":0,"w":53,"h":128},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":53,"h":128},
@@ -18,7 +42,7 @@
 },
 "left_run instance 10000":
 {
-	"frame": {"x":106,"y":0,"w":54,"h":128},
+	"frame": {"x":273,"y":0,"w":54,"h":128},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":54,"h":128},
@@ -26,7 +50,7 @@
 },
 "left_run instance 10001":
 {
-	"frame": {"x":160,"y":0,"w":54,"h":128},
+	"frame": {"x":327,"y":0,"w":54,"h":128},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":54,"h":128},
@@ -34,7 +58,7 @@
 },
 "left_run instance 10002":
 {
-	"frame": {"x":0,"y":128,"w":54,"h":128},
+	"frame": {"x":381,"y":0,"w":54,"h":128},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":54,"h":128},
@@ -42,15 +66,39 @@
 },
 "left_run instance 10003":
 {
-	"frame": {"x":54,"y":128,"w":54,"h":128},
+	"frame": {"x":435,"y":0,"w":54,"h":128},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":54,"h":128},
 	"sourceSize": {"w":54,"h":128}
 },
+"right_attack instance 10000":
+{
+	"frame": {"x":0,"y":128,"w":53,"h":128},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":0,"w":58,"h":128},
+	"sourceSize": {"w":58,"h":128}
+},
+"right_attack instance 10001":
+{
+	"frame": {"x":53,"y":128,"w":58,"h":128},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":58,"h":128},
+	"sourceSize": {"w":58,"h":128}
+},
+"right_attack instance 10002":
+{
+	"frame": {"x":111,"y":128,"w":53,"h":128},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":0,"w":58,"h":128},
+	"sourceSize": {"w":58,"h":128}
+},
 "right_idle instance 10000":
 {
-	"frame": {"x":108,"y":128,"w":53,"h":129},
+	"frame": {"x":164,"y":128,"w":53,"h":129},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":53,"h":129},
@@ -58,7 +106,7 @@
 },
 "right_idle instance 10001":
 {
-	"frame": {"x":161,"y":128,"w":53,"h":129},
+	"frame": {"x":217,"y":128,"w":53,"h":129},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":53,"h":129},
@@ -66,7 +114,7 @@
 },
 "right_run instance 10000":
 {
-	"frame": {"x":0,"y":257,"w":54,"h":128},
+	"frame": {"x":270,"y":128,"w":54,"h":128},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":54,"h":128},
@@ -74,7 +122,7 @@
 },
 "right_run instance 10001":
 {
-	"frame": {"x":54,"y":257,"w":54,"h":128},
+	"frame": {"x":324,"y":128,"w":54,"h":128},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":54,"h":128},
@@ -82,7 +130,7 @@
 },
 "right_run instance 10002":
 {
-	"frame": {"x":108,"y":257,"w":54,"h":128},
+	"frame": {"x":378,"y":128,"w":54,"h":128},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":54,"h":128},
@@ -90,7 +138,7 @@
 },
 "right_run instance 10003":
 {
-	"frame": {"x":162,"y":257,"w":54,"h":128},
+	"frame": {"x":432,"y":128,"w":54,"h":128},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":54,"h":128},
@@ -101,7 +149,7 @@
 	"version": "19.2.1.408",
 	"image": "art3.png",
 	"format": "RGBA8888",
-	"size": {"w":256,"h":512},
+	"size": {"w":512,"h":512},
 	"scale": "1"
 }
 }

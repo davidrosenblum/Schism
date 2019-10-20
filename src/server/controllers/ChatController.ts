@@ -4,6 +4,7 @@ import { MapFxFactory } from "../maps/MapFxFactory";
 import { MapFxType } from "../maps/MapFxData";
 import { User } from "../users/User";
 import { UserUpdater } from "../users/UserUpdater";
+import { Anim } from "../entities/GameObject";
 import { NPC } from "../entities/NPC";
 
 
@@ -116,7 +117,13 @@ class ChatControllerType{
         // third...n arguments are values depending on request (all strings)
         switch(args[1]){
             case "map":
+                // second argument (args[1]) is mapId, third argument (args[3]) is password (optional)
                 MapsController.processMapJoin(user, {mapId: args[2], password: args[3]});
+                break;
+
+            case "anim":
+                // second argument (args[1] is animation)
+                user.player.anim = args[2] as Anim
                 break;
 
             default:

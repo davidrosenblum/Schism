@@ -1,0 +1,9 @@
+div.remember-me-container{
+    text-align: left;
+    font-size: 0.8em;
+    padding: 4px 1px 1px 4px;
+}
+
+div.remember-me-container > *{
+    vertical-align: middle;
+}

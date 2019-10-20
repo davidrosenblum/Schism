@@ -121,15 +121,25 @@ export class Player extends Unit{
      * @param xp amount of experience to add
      */
     public addXP(xp:number):void{
+        // ignore if max level
+        if(this.isLevelCap)
+            return;
+
+        // store xp earned (for event)
+        const totalXP:number = xp;
+        // levelup if possible
         while(xp >= this.xpToGo){
+            // level up
             xp -= this.xpToGo;
             this.levelUp();
         }
+        // add leftover xp
         this._xp += xp;
 
+        // trigger update
         this.triggerPlayerUpdate(
             {xp: this.xp},
-            `You earned ${xp} experience.`
+            `You earned ${totalXP} experience.`
         );
     }
 
@@ -138,8 +148,14 @@ export class Player extends Unit{
      * @param merits amount of merits to add
      */
     public addMerits(merits:number):void{
+        // ignore if merits already full
+        if(this.meritsFull)
+            return;
+
+        // add merits and enforce capacity
         this._merits = Math.min(this.merits + Math.abs(merits), Player.MERITS_CAP);
 
+        // trigger update
         this.triggerPlayerUpdate(
             {merits: this._merits},
             `You earned ${merits} merits.`
@@ -221,6 +237,14 @@ export class Player extends Unit{
      */
     public get isLevelCap():boolean{
         return this.level >= Player.LEVEL_CAP;
+    }
+
+    /**
+     * Getter for if the player has reach merit capacity.
+     * @returns True/false if at merit cap.
+     */
+    public get meritsFull():boolean{
+        return this.merits >= Player.MERITS_CAP;
     }
 
     /**
