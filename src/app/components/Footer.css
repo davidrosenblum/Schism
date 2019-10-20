@@ -1,4 +1,5 @@
 footer.footer{
+    color: white;
     width: 400px;
     text-align: center;
     margin: auto;
@@ -9,6 +10,7 @@ footer.footer .footer-items > * {
 }
 
 footer.footer > hr{
-    border-top: 1px solid black;
+    border: 0;
+    border-top: 1px solid white;
     margin-bottom: 15px;
 }

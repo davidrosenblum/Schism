@@ -17,6 +17,7 @@ export class Keyboard{
     public stop():void{
         this._element.removeEventListener("keyup", this.onKeyUp);
         this._element.removeEventListener("keydown", this.onKeyDown);
+        this.onKey = null;
     }
 
     private onKeyUp = (evt:KeyboardEvent):void => {

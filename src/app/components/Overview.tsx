@@ -11,9 +11,8 @@ export const Overview = () => {
     };
 
     const onLogout = () => {
-        if(!checkDisabled()){
+        if(!checkDisabled())
             requestLogout();
-        }
     };
 
     const disabled:boolean = checkDisabled();
@@ -21,7 +20,9 @@ export const Overview = () => {
     return (
         <MenuContainer>
             <div>
-                <MapListTable disabled={disabled}/>
+                <MapListTable
+                    disabled={disabled}
+                />
             </div>
             <br/>
             <div className="text-center">

@@ -5,13 +5,13 @@ interface Props extends React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLIn
 }
 
 export const Input = (props:Props) => {
-    const {children} = props;
-
-    const className:string = `core ${props.className || ""}`;
+    const {children, className, ...attributes} = props;
+    
+    const classNames:string[] = ["core", ...(className || "").split("")];
 
     return (
         <div className="core input-container">
-            <input {...props} className={className}>
+            <input {...attributes} className={classNames.join(" ")}>
                 {children}
             </input>
         </div>
