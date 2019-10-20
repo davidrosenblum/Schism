@@ -1,0 +1,43 @@
+﻿{"frames": {
+
+"manaburst instance 10000":
+{
+	"frame": {"x":0,"y":0,"w":90,"h":100},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":84,"y":80,"w":273,"h":254},
+	"sourceSize": {"w":273,"h":254}
+},
+"manaburst instance 10001":
+{
+	"frame": {"x":90,"y":0,"w":210,"h":228},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":34,"y":23,"w":273,"h":254},
+	"sourceSize": {"w":273,"h":254}
+},
+"manaburst instance 10002":
+{
+	"frame": {"x":0,"y":228,"w":273,"h":254},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":273,"h":254},
+	"sourceSize": {"w":273,"h":254}
+},
+"manaburst instance 10003":
+{
+	"frame": {"x":273,"y":228,"w":90,"h":100},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":84,"y":80,"w":273,"h":254},
+	"sourceSize": {"w":273,"h":254}
+}},
+"meta": {
+	"app": "Adobe Animate",
+	"version": "19.2.1.408",
+	"image": "art3.png",
+	"format": "RGBA8888",
+	"size": {"w":512,"h":512},
+	"scale": "1"
+}
+}

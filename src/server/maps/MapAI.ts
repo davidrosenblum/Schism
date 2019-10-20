@@ -197,7 +197,7 @@ export class MapAI{
         // pick random ability and attack target
         const ability:Ability = npc.getAnyAbility();
         if(ability)
-            ability.cast(npc, npc.target, units);
+            ability.cast(npc, npc.target, this._map, null, {units});
     }
 
     /**

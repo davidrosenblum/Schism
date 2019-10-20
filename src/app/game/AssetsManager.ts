@@ -10,8 +10,12 @@ import * as molten_ash from "../assets/images/texture_molten_ash.png";
 import * as castle_wall from "../assets/images/doodad_castle_wall.png";
 import * as rock from "../assets/images/doodad_rock.png";
 
+import * as fx_death from "../assets/images/fx_death.png";
+import * as fx_death_anim from "../assets/images/fx_death.json";
 import * as fx_levelup from "../assets/images/fx_levelup.png";
 import * as fx_levelup_anim from "../assets/images/fx_levelup.json";
+import * as fx_manaburst from "../assets/images/fx_manaburst.png";
+import * as fx_manaburst_anim from "../assets/images/fx_manaburst.json";
 import * as fx_rez from "../assets/images/fx_rez.png";
 import * as fx_rez_anim from "../assets/images/fx_rez.json";
 
@@ -38,7 +42,9 @@ export class AssetsManager{
         molten_ash,
         castle_wall,
         rock,
+        fx_death,
         fx_levelup,
+        fx_manaburst,
         fx_rez,
         enemy_ghoul,
         enemy_grave_knight,
@@ -54,7 +60,9 @@ export class AssetsManager{
 
     // these are NOT loaded async 
     private static readonly animations:{[alias:string]: AnimationJson} = {
+        fx_death: fx_death_anim,
         fx_levelup: fx_levelup_anim,
+        fx_manaburst: fx_manaburst_anim,
         fx_rez: fx_rez_anim,
         enemy_ghoul: enemy_ghoul_anim,
         enemy_lich: enemy_lich_anim,

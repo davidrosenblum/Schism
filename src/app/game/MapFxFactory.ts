@@ -14,14 +14,22 @@ interface FxPartialData{
 }
 
 const fxTypes:{[fxType:string]: ()=>FxPartialData} = {
+    "death": () => ({
+        imageSrc: AssetsManager.getImageSrc("fx_death"),
+        animations: AnimationLoader.loadJson(AssetsManager.getAnimJson("fx_death"))
+    }),
     "levelup": () => ({
         imageSrc: AssetsManager.getImageSrc("fx_levelup"),
         animations: AnimationLoader.loadJson(AssetsManager.getAnimJson("fx_levelup"))
     }),
+    "manaburst": () => ({
+        imageSrc: AssetsManager.getImageSrc("fx_manaburst"),
+        animations: AnimationLoader.loadJson(AssetsManager.getAnimJson("fx_manaburst"))
+    }),
     "rez": () => ({
         imageSrc: AssetsManager.getImageSrc("fx_rez"),
-        animations: AnimationLoader.loadJson(AssetsManager.getAnimJson("fx_rez"), {"rez": {frameCount: 90}})
-    }),
+        animations: AnimationLoader.loadJson(AssetsManager.getAnimJson("fx_rez"))
+    })
 };
 
 export class MapFxFactory{

@@ -241,7 +241,6 @@ class GameManagerType{
         this._fxs.set(data.id, fx);
         
         if(!sticky){
-            console.log("Not sticky")
             fx.drawBox.setPosition(target.drawBox.x, target.drawBox.y);
             this.scene.addChild(fx);
         }

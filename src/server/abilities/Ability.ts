@@ -1,4 +1,7 @@
 import { Unit } from "../entities/Unit";
+import { MapFxType } from "../maps/MapFxData";
+import { MapFxFactory } from "../maps/MapFxFactory";
+import { MapInstance } from "../maps/MapInstance";
 
 export enum AbilityTargets{
     SELF_ONLY, ALLIES_ONLY, ALLIES_AND_SELF, 
@@ -36,6 +39,7 @@ export interface AbilityConfig{
     manaCost:number;
     recharge:number;
     maxTargets:number,
+    castFx?:MapFxType;
     affect:(caster:Unit, target:Unit, relationship?:TargetRelationship)=>boolean;
 }
 
@@ -76,8 +80,10 @@ export class Ability{
      * @param allUnits      all possible targets
      * @param cb            callback for helpful errors (with validation)
      */
-    public cast(caster:Unit, mainTarget:Unit, allUnits:Iterable<Unit>, cb?:(err?:string)=>void):void{
+    public cast(caster:Unit, mainTarget:Unit, map:MapInstance, cb?:(err?:string)=>void, opts:{units?:Iterable<Unit>}={}):void{
         this.validateCast(caster, mainTarget, err => {
+            const allUnits:Iterable<Unit> = opts.units || map.getAllUnits();
+
             if(!err){
                 // valid cast
                 this._ready = false;                                                // ability no longer ready
@@ -86,6 +92,10 @@ export class Ability{
                 caster.mana.modify(-this.manaCost);                                 // consume mana
                 this.affectTargets(caster, mainTarget, allUnits);                   // start affecting targets
                 setTimeout(() => this.forceRecharge(), this.recharge * 1000);       // begin cooldown
+
+                // ability cast animation
+                if(this._config.castFx)
+                    map.createEffect(MapFxFactory.create(this._config.castFx, caster.id));
 
                 // reset animation when cast complete
                 setTimeout(() => {

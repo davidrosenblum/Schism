@@ -1,7 +1,7 @@
 import { TokenGenerator } from "../utils/TokenGenerator";
 
 export type MapFxType = (
-    "death" | "levelup" | "rez"
+    "death" | "levelup" | "manaburst" | "rez"
 );
 
 export interface MapFxParams{
