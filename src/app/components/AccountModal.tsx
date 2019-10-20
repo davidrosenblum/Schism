@@ -62,6 +62,7 @@ export const AccountModal = () => {
                         value={username}
                         onChange={onUsername}
                         disabled={disabled}
+                        maxLength={15}
                         required
                     />
                 </div>
@@ -73,6 +74,7 @@ export const AccountModal = () => {
                         value={password}
                         onChange={onPassword}
                         disabled={disabled}
+                        maxLength={20}
                         required
                     />
                 </div>
@@ -84,6 +86,7 @@ export const AccountModal = () => {
                         value={pwConfirm}
                         onChange={onPwConfirm}
                         disabled={disabled}
+                        maxLength={20}
                         required
                     />
                 </div>

@@ -3,6 +3,7 @@ import { MapInstance, MapSummary, MapDifficulty, MapEmptyEvent, MapType } from "
 import { MapInstanceFactory } from "../maps/MapInstanceFactory";
 import { User } from "../users/User";
 import { UserUpdater } from "../users/UserUpdater";
+import { Validator } from "../utils/Validator";
 
 export class MapsControllerType{    
     private _maps:Map<string, MapInstance>;
@@ -14,9 +15,10 @@ export class MapsControllerType{
         this._maps = new Map();
 
         // test maps (remove later)
-        for(let i:number = 0; i < 15; i++){
+        for(let i:number = 0; i < 15; i++)
             this.createMap("Test", MapDifficulty.TRAINING, `Test Map ${i+1}`);
-        }
+        for(let i:number = 15; i < 18; i++)
+            this.createMap("Test", MapDifficulty.STANDARD, `Test Map ${i+1}`, "111");
     }
 
     /**
@@ -45,18 +47,27 @@ export class MapsControllerType{
             return;
         }
 
-        // create the map
-        this.createMap(mapType, difficulty, customName, password, (err, map) => {
+        // validate map name and password
+        Validator.validateMap(customName, password || "", err => {
+            // validation error?
             if(err){
-                // error creating map, send error
                 UserUpdater.error(user, "map-create", err);
+                return;
             }
-            else{
-                // map created, update user and join
-                UserUpdater.mapCreated(user);
-                this.processMapJoin(user, {mapId: map.id, password});
-            }
-        })
+
+            // create the map
+            this.createMap(mapType, difficulty, customName, password, (err, map) => {
+                if(err){
+                    // error creating map, send error
+                    UserUpdater.error(user, "map-create", err);
+                }
+                else{
+                    // map created, update user and join
+                    UserUpdater.mapCreated(user);
+                    this.processMapJoin(user, {mapId: map.id, password});
+                }
+            });
+        });
     }
 
     /**

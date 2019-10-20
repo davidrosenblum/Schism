@@ -52,6 +52,7 @@ export const Login = () => {
                         value={username}
                         onChange={onUsername}
                         disabled={disabled}
+                        maxLength={15}
                         required
                     />
                 </div>
@@ -63,6 +64,7 @@ export const Login = () => {
                         value={password}
                         onChange={onPassword}
                         disabled={disabled}
+                        maxLength={20}
                         required
                     />
                 </div>

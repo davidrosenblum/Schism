@@ -2,7 +2,7 @@ import * as React from "react";
 import { Button, Input, MenuContainer, Select } from "./core";
 import { store } from "../Client";
 import { showOverview } from "../actions/MenuActions";
-import { MapTypes, MapDifficulties, MapDifficulty } from "../data/MapData";
+import { MapTypes, MapDifficulties } from "../data/MapData";
 import { requestMapCreate } from "../requests/MapListRequests";
 
 export const MapCreate = () => {
@@ -84,6 +84,7 @@ export const MapCreate = () => {
                         value={customName}
                         onChange={onCustomName}
                         disabled={disabled}
+                        maxLength={15}
                         required
                     />
                 </div>
@@ -95,6 +96,7 @@ export const MapCreate = () => {
                         value={password}
                         onChange={onPassword}
                         disabled={disabled}
+                        maxLength={15}
                     />
                 </div>
                 <br/>

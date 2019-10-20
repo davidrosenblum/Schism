@@ -55,6 +55,7 @@ Make sure you have the `port=8080` query string (or whatever port the server is 
 | CRT       | String  | SSL .crt file                          | ""                               | CRT=certs/local.crt                      |
 | PFX       | String  | SSL .pfx file                          | ""                               | PFX=certs/local.pfx                      |
 | PFX_PP    | String  | SSL .pfx file's passphrase             | ""                               | PFX_PP=myPassphrase                      |
+<!-- | LOG_REQ   | Boolean | Log websocket requests                 | false                            | LOG_REQ=true                             | -->
 
   
 
@@ -68,6 +69,7 @@ Make sure you have the `port=8080` query string (or whatever port the server is 
 | password  | String  | Default password          | password=123  |
 | dev_map   | Boolean | Map builder mode          | dev_map=true  |
 | test      | Boolean | Graphics test mode        | test=true     |
+| h         | Integer | Resizes the canvas        | h=720         |
   
 
 
