@@ -240,6 +240,9 @@ class GameManagerType{
 
         this._fxs.set(data.id, fx);
         
+        if(fx.drawBox.width > target.drawBox.width)
+            (fx.drawBox.x -= fx.drawBox.width - fx.drawBox.width) / 2;
+
         if(!sticky){
             fx.drawBox.setPosition(target.drawBox.x, target.drawBox.y);
             this.scene.addChild(fx);

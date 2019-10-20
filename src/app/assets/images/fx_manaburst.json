@@ -26,10 +26,10 @@
 },
 "manaburst instance 10003":
 {
-	"frame": {"x":273,"y":228,"w":90,"h":100},
+	"frame": {"x":0,"y":482,"w":273,"h":254},
 	"rotated": false,
-	"trimmed": true,
-	"spriteSourceSize": {"x":84,"y":80,"w":273,"h":254},
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":273,"h":254},
 	"sourceSize": {"w":273,"h":254}
 }},
 "meta": {
@@ -37,7 +37,7 @@
 	"version": "19.2.1.408",
 	"image": "art3.png",
 	"format": "RGBA8888",
-	"size": {"w":512,"h":512},
+	"size": {"w":512,"h":1024},
 	"scale": "1"
 }
 }
