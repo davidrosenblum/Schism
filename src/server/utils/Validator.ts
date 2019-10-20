@@ -9,10 +9,11 @@ export const USERNAME_LENGTHS:[number, number] =    [3, 15];
 export const PASSWORD_LENGTHS:[number, number] =    [5, 20];
 export const NAME_LENGTHS:[number, number] =        [3, 10];
 export const MAP_NAME_LENGTHS:[number, number] =    [3, 15];
+export const MAP_PW_LENGTHS:[number, number] =      [0, 15];
 export const BAD_USERNAME_REGEX:RegExp =            /[^a-z0-9]/gi;
 export const BAD_PASSWORD_REGEX:RegExp =            /[^A-Za-z0-9!#@$%^&]/gi;
 export const BAD_NAME_REGEX:RegExp =                /[^a-z0-9]/gi;
-export const BAD_MAP_NAME_REGEX:RegExp =            /[&a-z0-9\s]/gi;
+export const BAD_MAP_NAME_REGEX:RegExp =            /[^a-z0-9]/gi;
 
 /**
  * Validates user input based on configuration
@@ -105,6 +106,20 @@ export const validateMapName = (name:string, cb:(err?:string)=>void):void => {
 };
 
 /**
+ * Validates optional map passwords.
+ * @param password  The optional map password.
+ * @param cb        Callback with helpful error.
+ */
+export const validateMapPassword = (password:string, cb:(err?:string)=>void):void => {
+    validate({
+        input:          password,
+        inputName:      "Map password",
+        lengths:        MAP_PW_LENGTHS,
+        invalidTest:    BAD_PASSWORD_REGEX
+    }, cb);
+};
+
+/**
  * 
  * @param username  account username input
  * @param password  account password input
@@ -119,7 +134,22 @@ export const validateAccount = (username:string, password:string, cb:(err?:strin
     });
 };
 
+/**
+ * Validates map custom names and optional passwords.
+ * @param name      The custom map name.
+ * @param password  The optional map password.
+ * @param cb        Callback with helpful error.
+ */
+export const validateMap = (name:string, password:string, cb:(err?:string)=>void):void => {
+    validateMapName(name, err => {
+        if(!err)
+            validateMapPassword(password, cb);
+        else
+            cb(err);
+    });
+};
+
 // export as an object
 export const Validator = {
-    validateUsername, validatePassword, validateName, validateMapName, validateAccount
+    validateUsername, validatePassword, validateName, validateMapName, validateMapPassword, validateAccount, validateMap
 };
