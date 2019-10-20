@@ -105,7 +105,7 @@ export class GameObject extends Object2D{
      */
     public setState(update:GameObjectUpdate, triggerUpdate:boolean=true):void{
         if(typeof update.anim === "string")
-            this._anim = update.anim;
+            this._anim = this.sanitizeAnim(update.anim);
 
         if(typeof update.facing === "string")
             this._facing = update.facing;
@@ -114,6 +114,18 @@ export class GameObject extends Object2D{
             this._moveSpeed = update.moveSpeed;
 
         super.setState(update, triggerUpdate);
+    }
+
+    /**
+     * Returns the anim if it is clean, otherwise the current value.
+     * @param anim The unclean animation.
+     * @returns Clean anim or current.
+     */
+    private sanitizeAnim(anim:string):Anim{
+        if(anim !== "idle" && anim !== "run" && anim !== "attack")
+            return this.anim;
+        else
+            return anim;
     }
 
     /**
@@ -142,7 +154,7 @@ export class GameObject extends Object2D{
      * Setter for the new animatio, triggers update
      */
     public set anim(val:Anim){
-        this._anim = val;
+        this._anim = this.sanitizeAnim(val);
         this.triggerUpdate<GameObjectUpdate>({anim: val});
     }
 
