@@ -1,5 +1,5 @@
 div.game-container{
-    background-color: #202022;
+    background: linear-gradient(#202022, #101012);
     position: fixed;
     top: 0px;
     left: 0px;

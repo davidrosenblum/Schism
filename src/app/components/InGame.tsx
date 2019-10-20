@@ -8,8 +8,14 @@ import { requestMapLeave } from "../requests/MapListRequests";
 import "./InGame.css";
 
 export const InGame = () => {
+    const canvasRef = React.useRef<HTMLCanvasElement>();
+    
     React.useEffect(() => {
-        
+        const params = new URLSearchParams(window.location.search);
+        const h:number = parseInt(params.get("h"));
+        if(h)
+            canvasRef.current.style.width = `${h * (1.77777)}px`;
+            canvasRef.current.style.height = `${h}px`;
     }, []);
 
     const onExit = () => {
@@ -29,7 +35,7 @@ export const InGame = () => {
             </div>
             <br/>
             <div className="canvas-container">
-                <canvas/>
+                <canvas ref={canvasRef}/>
             </div>
             <br/>
             <div className="hud-container">
