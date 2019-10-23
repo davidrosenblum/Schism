@@ -2,7 +2,7 @@ import * as React from "react";
 import { Input, Button, Table } from "./core";
 import { store } from "../Client";
 import { showMapCreate } from "../actions/MenuActions";
-import { MapDifficulties } from "../data/MapData";
+import { MapDifficulties, MapTypes } from "../data/MapData";
 import { MapListItem } from "../data/Payloads";
 import { requestMapList, requestMapJoin } from "../requests/MapListRequests";
 import "./MapListTable.css";
@@ -79,8 +79,10 @@ export const MapListTable = (props:Props) => {
     }
 
     const filteredList = filter ? list.filter(val => {
+        console.log('val', val)
         return val.customName.toLowerCase().includes(filter) ||
-            val.type.toLowerCase().includes(filter) ||
+            MapTypes[val.type].mapName.includes(filter) ||
+            MapDifficulties[val.difficulty].difficulty.includes(filter) ||
             val.population.toString().includes(filter) ||
             val.populationLimit.toString().includes(filter)
     }) : list;
@@ -95,7 +97,7 @@ export const MapListTable = (props:Props) => {
 
         return (
             <tr key={i} className={cname} onClick={() => setSelectedMap(selectedMap === val ? null : val)}>
-                <td>{type}</td>
+                <td>{MapTypes[type].mapName}</td>
                 <td>{customName}</td>
                 <td>{MapDifficulties[difficulty - 1].difficulty}</td>
                 <td>{population}/{populationLimit}</td>

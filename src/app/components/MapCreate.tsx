@@ -45,7 +45,7 @@ export const MapCreate = () => {
     const mapOptions = MapTypes.map((val, i) => {
         return (
             <option key={i} value={i}>
-                {val.mapType}
+                {val.mapName}
             </option>
         );
     });
@@ -57,6 +57,9 @@ export const MapCreate = () => {
             </option>
         );
     });
+
+    const {enemyType} = MapTypes[mapTypeIdx];
+    const [enemyLvlMin, enemyLvlMax] = MapDifficulties[difficultyIdx].levels;
 
     const disabled:boolean = store.getState().mapList.pendingCreate;
     
@@ -72,6 +75,9 @@ export const MapCreate = () => {
                 <br/>
                 <div>
                     <label>Difficulty</label>
+                    <span style={{float: "right"}}>
+                        ({enemyType} enemies levels {enemyLvlMin}-{enemyLvlMax})
+                    </span>
                     <Select value={difficultyIdx} disabled={disabled} onChange={onDifficulty}>
                         {difficultyOptions}
                     </Select>
