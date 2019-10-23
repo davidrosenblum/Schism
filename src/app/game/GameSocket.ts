@@ -1,6 +1,6 @@
 import { AssetsManager } from "./AssetsManager";
 import { GameManager } from "./GameManager";
-import { store } from "../Client";
+import { store } from "..";
 import { showLogin } from "../actions/MenuActions";
 import { processServerData } from "../controllers/RootController";
 import { setLoginPending } from "../actions/AccountActions";

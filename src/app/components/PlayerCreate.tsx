@@ -1,11 +1,15 @@
 import * as React from "react";
+import { connect } from "react-redux";
+import { Dispatch } from "redux";
 import { Button, Input, MenuContainer, Select } from "./core";
-import { store } from "../Client";
 import { showPlayerSelect } from "../actions/MenuActions";
 import { Archetypes } from "../data/ArchetypeData";
+import { AppState } from "../reducers";
 import { requestPlayerCreate } from "../requests/PlayerListRequests";
 
-export const PlayerCreate = () => {
+type Props = StateFromProps & DispatchFromProps;
+
+export const PlayerCreate = (props:Props) => {
     const [name, setName] = React.useState("");
     const [archetypeIndex, setArchetypeIndex] = React.useState(1);
 
@@ -18,9 +22,8 @@ export const PlayerCreate = () => {
     };
 
     const onCancel = () => {
-        if(!store.getState().playerList.pendingCreate){
-            store.dispatch(showPlayerSelect());
-        }
+        if(!props.pendingCreate)
+            props.showPlayerSelect();
     };
 
     const onSubmit = (evt:React.FormEvent<HTMLFormElement>) => {
@@ -40,7 +43,7 @@ export const PlayerCreate = () => {
         description, role, icon, archetype
     } = Archetypes[archetypeIndex];
 
-    const disabled:boolean = store.getState().playerList.pendingCreate;
+    const disabled:boolean = props.pendingCreate;
 
     return (
         <MenuContainer>
@@ -102,3 +105,21 @@ export const PlayerCreate = () => {
         </MenuContainer>
     );
 };
+
+interface StateFromProps{
+    pendingCreate:boolean;
+}
+
+const mapStateToProps = (state:AppState):StateFromProps => ({
+    pendingCreate: state.playerList.pendingCreate
+});
+
+interface DispatchFromProps{
+    showPlayerSelect:()=>void;
+}
+
+const mapDispatchToProps = (dispatch:Dispatch):DispatchFromProps => ({
+    showPlayerSelect: () => dispatch(showPlayerSelect())
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(PlayerCreate);

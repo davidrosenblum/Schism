@@ -1,6 +1,8 @@
 import * as React from "react";
-import { store } from "../Client";
-import { Archetypes } from "./../data/ArchetypeData";
+import { connect } from "react-redux";
+import { Archetypes } from "../data/ArchetypeData";
+import { UnitState } from "../data/Payloads";
+import { AppState } from "../reducers";
 import * as background from "../assets/images/ui_box_1.png";
 import * as hp from "../assets/images/hud_hp.png";
 import * as mp from "../assets/images/hud_mp.png"
@@ -9,8 +11,10 @@ import "./HudPlayerStats.css";
 
 const ICON_SIZE:number = 32;
 
-export const HudPlayerStats = () => {
-    const {playerStats} = store.getState().gameStats;
+type Props = StateFromProps;
+
+export const HudPlayerStats = (props:Props) => {
+    const {playerStats} = props;
 
     const {
         name, level, health, healthCap, mana, manaCap,
@@ -63,4 +67,14 @@ export const HudPlayerStats = () => {
             </table>
         </div>
     );
-};  
+};
+
+interface StateFromProps{
+    playerStats:UnitState;
+}
+
+const mapStateFromProps = (state:AppState):StateFromProps => ({
+    playerStats: state.gameStats.playerStats
+});
+
+export default connect(mapStateFromProps)(HudPlayerStats);

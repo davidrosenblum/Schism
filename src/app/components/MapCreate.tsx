@@ -1,11 +1,15 @@
 import * as React from "react";
+import { connect } from "react-redux";
+import { Dispatch } from "redux";
 import { Button, Input, MenuContainer, Select } from "./core";
-import { store } from "../Client";
 import { showOverview } from "../actions/MenuActions";
 import { MapTypes, MapDifficulties } from "../data/MapData";
 import { requestMapCreate } from "../requests/MapListRequests";
+import { AppState } from "../reducers";
 
-export const MapCreate = () => {
+type Props = StateFromProps & DispatchFromProps;
+
+export const MapCreate = (props:Props) => {
     const [mapTypeIdx, setMapTypeIdx] = React.useState(0);
     const [difficultyIdx, setDifficultyIdx] = React.useState(0);
     const [customName, setCustomName] = React.useState("");
@@ -30,9 +34,8 @@ export const MapCreate = () => {
     };
 
     const onCancel = () => {
-        if(!store.getState().mapList.pendingCreate){
-            store.dispatch(showOverview());
-        }
+        if(!props.pendingCreate)
+            props.showOverview();
     };
 
     const onSubmit = (evt:React.FormEvent<HTMLFormElement>) => {
@@ -61,7 +64,7 @@ export const MapCreate = () => {
     const {enemyType} = MapTypes[mapTypeIdx];
     const [enemyLvlMin, enemyLvlMax] = MapDifficulties[difficultyIdx].levels;
 
-    const disabled:boolean = store.getState().mapList.pendingCreate;
+    const disabled:boolean = props.pendingCreate;
     
     return (
         <MenuContainer>
@@ -119,3 +122,21 @@ export const MapCreate = () => {
         </MenuContainer>
     );
 };
+
+interface StateFromProps{
+    pendingCreate:boolean;
+}
+
+const mapStateToProps = (state:AppState):StateFromProps => ({
+    pendingCreate: state.mapList.pendingCreate
+});
+
+interface DispatchFromProps{
+    showOverview:()=>void;
+}
+
+const mapDispatchToProps = (dispatch:Dispatch):DispatchFromProps => ({
+    showOverview: () => dispatch(showOverview())
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(MapCreate);

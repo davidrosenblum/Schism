@@ -1,4 +1,4 @@
-import { store } from "../Client";
+import { store } from "..";
 import { setAbilityCastPending } from "../actions/AbilityActions";
 import { GameManager } from "../game/GameManager";
 import { GameSocket } from "../game/GameSocket";

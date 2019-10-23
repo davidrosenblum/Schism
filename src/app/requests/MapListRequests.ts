@@ -1,4 +1,4 @@
-import { store } from "../Client";
+import { store } from "..";
 import { setMapJoinPending, setMapLeavePending, setMapCreatePending, setMapListPending } from "../actions/MapListActions";
 import { GameSocket } from "../game/GameSocket";
 

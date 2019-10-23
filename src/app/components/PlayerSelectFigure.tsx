@@ -1,7 +1,5 @@
 import * as React from "react";
 import { Button } from "./core";
-import { store } from "../Client";
-import { showPlayerCreate } from "../actions/MenuActions";
 import { Archetypes } from "../data/ArchetypeData";
 import { PlayerListItem } from "../data/Payloads";
 import { Keyboard } from "../gfx/Keyboard";
@@ -13,7 +11,8 @@ const PLAYER_LIST_LENGTH:number = 6;
 
 interface Props{
     disabled:boolean;
-    list:PlayerListItem[];
+    list:PlayerListItem[]
+    showPlayerCreate:()=>void;
 }
 
 export const PlayerSelectFigure = (props:React.PropsWithChildren<Props>) => {
@@ -53,7 +52,7 @@ export const PlayerSelectFigure = (props:React.PropsWithChildren<Props>) => {
 
     const onCreate = () => {
         if(!props.disabled)
-            store.dispatch(showPlayerCreate());
+            props.showPlayerCreate();
     };
 
     const selectTab = (index:number) => {
@@ -132,3 +131,5 @@ export const PlayerSelectFigure = (props:React.PropsWithChildren<Props>) => {
         </figure>
     )
 };
+
+export default PlayerSelectFigure;

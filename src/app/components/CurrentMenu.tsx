@@ -1,15 +1,20 @@
 import * as React from "react";
-import { store } from "../Client";
-import { Login } from "./Login";
-import { PlayerCreate } from "./PlayerCreate";
-import { PlayerSelect } from "./PlayerSelect";
-import { Overview } from "./Overview";
-import { InGame } from "./InGame";
-import { MapCreate } from "./MapCreate";
-import { DevMapMaker } from "./DevMapMaker";
+import { connect } from "react-redux";
+import Login from "./Login";
+import PlayerCreate from "./PlayerCreate";
+import PlayerSelect from "./PlayerSelect";
+import Overview from "./Overview";
+import InGame from "./InGame";
+import MapCreate from "./MapCreate";
+import DevMapMaker from "./DevMapMaker";
+import { Menu } from "../actions/MenuActions";
+import { AppState } from "../reducers";
 
-export const CurrentMenu = () => {
-    const {menu} = store.getState().menu;
+
+type Props = StateFromProps;
+
+export const CurrentMenu = (props:Props) => {
+    const {menu} = props;
 
     switch(menu){
         case "login":
@@ -37,3 +42,13 @@ export const CurrentMenu = () => {
             return null;
     }
 };
+
+interface StateFromProps{
+    menu:Menu;
+}
+
+const mapStateToProps = (state:AppState):StateFromProps => ({
+    menu: state.menu.menu
+});
+
+export default connect(mapStateToProps)(CurrentMenu);

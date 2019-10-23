@@ -1,13 +1,16 @@
 import * as React from "react";
+import { connect } from "react-redux";
 import { Button } from "./core";
 import { HudChat } from "./HudChat";
-import { HudPlayerStats } from "./HudPlayerStats";
-import { HudTargetStats } from "./HudTargetStats";
-import { store } from "../Client";
+import HudPlayerStats from "./HudPlayerStats";
+import HudTargetStats from "./HudTargetStats";
+import { AppState } from "../reducers";
 import { requestMapLeave } from "../requests/MapListRequests";
 import "./InGame.css";
 
-export const InGame = () => {
+type Props = StateFromProps;
+
+export const InGame = (props:Props) => {
     const canvasRef = React.useRef<HTMLCanvasElement>();
     
     React.useEffect(() => {
@@ -19,12 +22,12 @@ export const InGame = () => {
     }, []);
 
     const onExit = () => {
-        if(!store.getState().mapList.pendingLeave){
+        if(!props.pendingLeave){
             requestMapLeave();
         }
     };
 
-    const disabled:boolean = store.getState().mapList.pendingLeave;
+    const disabled:boolean = props.pendingLeave;
 
     return (
         <div className="game-container">
@@ -48,3 +51,13 @@ export const InGame = () => {
         </div>
     )
 };
+
+interface StateFromProps{
+    pendingLeave:boolean;
+}
+
+const mapStateToProps = (state:AppState):StateFromProps => ({
+    pendingLeave: state.mapList.pendingLeave
+});
+
+export default connect(mapStateToProps)(InGame);
