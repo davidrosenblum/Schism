@@ -9,7 +9,7 @@ export const requestMapList = ():void => {
     }
 };
 
-export const requestMapCreate = (mapType:string, difficulty:number, customName:string, password:string):void => {
+export const requestMapCreate = (mapType:number, difficulty:number, customName:string, password:string):void => {
     if(!store.getState().mapList.pendingCreate){
         GameSocket.createMap(mapType, difficulty, customName, password);
         store.dispatch(setMapCreatePending(true));

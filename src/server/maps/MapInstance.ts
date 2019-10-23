@@ -13,9 +13,11 @@ import { User } from "../users/User";
 import { UserUpdater } from "../users/UserUpdater";
 import { TokenGenerator } from "../utils/TokenGenerator";
 
-export type MapType = "Test";
+export enum MapType{
+    TEST = 0, W1E1 = 1, W1E2 = 2, W1E3 = 3
+}
 
-export enum MapDifficulty{
+export enum MapDifficulty{ // don't use 0
     TRAINING = 1, STANDARD = 2, VETERAN = 3, ELITE = 4, SUICIDAL = 5
 }
 
@@ -31,7 +33,7 @@ export interface MapInstanceParams{
     playerSpawn:MapLocation;
     enemyFaction:NpcFaction;
     difficulty?:MapDifficulty;
-    customName?:string;
+    customName:string;
     password?:string;
     populationLimit?:number;
 }
@@ -44,7 +46,7 @@ export interface MapJoinData{
 
 export interface MapSummary{
     id:string;
-    type:string;
+    type:MapType;
     customName:string;
     hasPassword:boolean;
     population:number;
@@ -95,7 +97,7 @@ export class MapInstance{
         this._playerSpawn = playerSpawn || {row: 1, col: 1};
 
         this._difficulty =      difficulty || MapDifficulty.STANDARD;
-        this._customName =      customName || type;
+        this._customName =      customName || "(Missing)";
         this._password =        password || "";
         this._populationLimit = populationLimit || 4;
         this._enemyFaction =    enemyFaction;

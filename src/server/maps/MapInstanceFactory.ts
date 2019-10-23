@@ -10,10 +10,40 @@ interface Config{
 
 // preset maps
 const mapTypes:Map<MapType, (config:Config)=>MapInstance> = new Map([
-    ["Test", config => {
+    [MapType.TEST, config => {
         return new MapInstance({
             ...config,
-            type:               "Test",
+            type:               MapType.TEST,
+            enemyFaction:       "Undead",
+            playerSpawn:        {row: 3, col: 3},
+            populationLimit:    4,
+            tileLayout:         MAP1_LAYOUT
+        });
+    }],
+    [MapType.W1E1, config => {
+        return new MapInstance({
+            ...config,
+            type:               MapType.W1E1,
+            enemyFaction:       "Undead",
+            playerSpawn:        {row: 3, col: 3},
+            populationLimit:    4,
+            tileLayout:         MAP1_LAYOUT
+        });
+    }],
+    [MapType.W1E2, config => {
+        return new MapInstance({
+            ...config,
+            type:               MapType.W1E2,
+            enemyFaction:       "Undead",
+            playerSpawn:        {row: 3, col: 3},
+            populationLimit:    4,
+            tileLayout:         MAP1_LAYOUT
+        });
+    }],
+    [MapType.W1E3, config => {
+        return new MapInstance({
+            ...config,
+            type:               MapType.W1E3,
             enemyFaction:       "Undead",
             playerSpawn:        {row: 3, col: 3},
             populationLimit:    4,

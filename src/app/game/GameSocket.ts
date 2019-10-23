@@ -97,7 +97,7 @@ class GameSocketType{
         this.sendData("map-list");
     }
 
-    public createMap(mapType:string, difficulty:number, customName:string, password?:string):void{
+    public createMap(mapType:number, difficulty:number, customName:string, password?:string):void{
         this.sendData("map-create", {mapType, difficulty, customName, password});
     }
 

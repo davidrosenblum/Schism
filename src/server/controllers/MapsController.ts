@@ -16,9 +16,9 @@ export class MapsControllerType{
 
         // test maps (remove later)
         for(let i:number = 0; i < 15; i++)
-            this.createMap("Test", MapDifficulty.TRAINING, `Test Map ${i+1}`);
+            this.createMap(MapType.TEST, MapDifficulty.TRAINING, `Test${i+1}`);
         for(let i:number = 15; i < 18; i++)
-            this.createMap("Test", MapDifficulty.STANDARD, `Test Map ${i+1}`, "111");
+            this.createMap(MapType.TEST, MapDifficulty.STANDARD, `Test${i+1}`, "111");
     }
 
     /**
@@ -34,9 +34,9 @@ export class MapsControllerType{
      * @param user      requesting user
      * @param param1    request body
      */
-    public processMapCreate(user:User, {mapType=null, customName=null, password=null, difficulty=0}):void{
+    public processMapCreate(user:User, {mapType=0, customName=null, password=null, difficulty=0}):void{
         // valiate request body
-        if(!mapType || !customName || !difficulty){
+        if((!mapType && mapType < 0) || !customName || !difficulty){
             UserUpdater.requestBodyError(user, "map-create");
             return;
         }
@@ -203,7 +203,7 @@ export class MapsControllerType{
      * @param pw            optional map password
      * @param cb            callback for helpful errors
      */
-    public createMap(type:MapType, difficulty:number, name:string, pw?:string, cb?:(err?:string, map?:MapInstance)=>void):void{
+    public createMap(type:number, difficulty:number, name:string, pw?:string, cb?:(err?:string, map?:MapInstance)=>void):void{
         // create the map
         const map:MapInstance = MapInstanceFactory.create(type, difficulty, name, pw);
         if(map){

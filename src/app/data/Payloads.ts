@@ -6,7 +6,7 @@ export interface PlayerListItem{
 
 export interface MapListItem{
     id:string;
-    type:string;
+    type:number;
     customName:string;
     hasPassword:boolean;
     difficulty:number;
