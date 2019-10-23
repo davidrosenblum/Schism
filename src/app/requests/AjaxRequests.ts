@@ -1,4 +1,4 @@
-import { store } from "../Client";
+import { store } from "..";
 import { setAccountPending } from "../actions/AccountActions";
 
 export const requestAccount = (username:string, password:string, cb:(err?:string, res?:string)=>void):void => {

@@ -1,4 +1,4 @@
-import { store } from "../Client";
+import { store } from "..";
 import { setLoginPending, setLogoutPending } from "../actions/AccountActions";
 import { GameSocket } from "../game/GameSocket";
 

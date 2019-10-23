@@ -1,5 +1,5 @@
 import { chatBuffer } from "./InGameController";
-import { store } from "../Client";
+import { store } from "..";
 import { setAbilityCastPending } from "../actions/AbilityActions";
 
 export const processAbilityCast = (payload:any):void => {

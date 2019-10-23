@@ -1,4 +1,4 @@
-import { store } from "../Client";
+import { store } from "..";
 import { setTargetData, setPlayerData } from "../actions/GameStatsActions";
 import { GameManager } from "../game/GameManager";
 

@@ -173,3 +173,5 @@ export const DevMapMaker = () => {
         </div>
     )
 };
+
+export default DevMapMaker;

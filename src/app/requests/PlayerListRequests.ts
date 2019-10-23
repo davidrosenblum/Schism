@@ -1,4 +1,4 @@
-import { store } from "../Client";
+import { store } from "..";
 import { setPlayerSelectPending, setPlayerListPending, setPlayerDeletePending, setPlayerCreatePending } from "../actions/PlayerListActions";
 import { GameSocket } from "../game/GameSocket";
 

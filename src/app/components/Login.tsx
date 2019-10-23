@@ -1,12 +1,16 @@
 import * as React from "react";
+import { connect } from "react-redux";
+import { Dispatch } from "redux";
 import { Button, Input, MenuContainer } from "./core";
-import { store } from "../Client";
 import { setAccountModalOpen } from "../actions/AccountActions";
 import { setAboutModalOpen } from "../actions/MenuActions";
+import { AppState } from "../reducers";
 import { requestLogin } from "../requests/AccountRequests";
 import "./Login.css";
 
-export const Login = () => {
+type Props = StateFromProps & DispatchFromProps;
+
+export const Login = (props:Props) => {
     const [username, setUsername] = React.useState("");
     const [password, setPassword] = React.useState("");
     const [remember, setRemember] = React.useState(false);
@@ -43,15 +47,13 @@ export const Login = () => {
     };
 
     const onCreate = () => {
-        if(!store.getState().account.pendingLogin){
-            store.dispatch(setAccountModalOpen(true));
-        }
+        if(!props.pendingLogin)
+            props.openAccountModal();
     };
 
     const onAbout = () => {
-        if(!store.getState().account.pendingLogin){
-            store.dispatch(setAboutModalOpen(true));
-        }
+        if(!props.pendingLogin)
+            props.openAboutModal();
     };
 
     const onSubmit = (evt:React.FormEvent<HTMLFormElement>) => {
@@ -64,7 +66,7 @@ export const Login = () => {
             window.localStorage.removeItem("username");
     };
 
-    const disabled:boolean = store.getState().account.pendingLogin;
+    const disabled:boolean = props.pendingLogin;
 
     return (
         <MenuContainer className="text-center">
@@ -119,3 +121,27 @@ export const Login = () => {
         </MenuContainer>
     );
 };
+
+interface StateFromProps{
+    pendingLogin:boolean;
+}
+
+const mapStateFromProps = (state:AppState):StateFromProps => ({
+    pendingLogin: state.account.pendingLogin
+});
+
+interface DispatchFromProps{
+    openAboutModal:()=>void;
+    closeAboutModal:()=>void;
+    openAccountModal:()=>void;
+    closeAccountModal:()=>void;
+}
+
+const mapDispatchFromProps = (dispatch:Dispatch):DispatchFromProps => ({
+    openAboutModal: () => dispatch(setAboutModalOpen(true)),
+    closeAboutModal: () => dispatch(setAboutModalOpen(false)),
+    openAccountModal: () => dispatch(setAccountModalOpen(true)),
+    closeAccountModal: () => dispatch(setAccountModalOpen(false))
+});
+
+export default connect(mapStateFromProps, mapDispatchFromProps)(Login);

@@ -1,6 +1,6 @@
 import { AssetsManager } from "./AssetsManager";
 import { GameManager, TILE_SIZE } from "./GameManager";
-import { store } from "../Client";
+import { store } from "..";
 import { setPlayerData } from "../actions/GameStatsActions";
 import { showGame } from "../actions/MenuActions";
 import { MapJoinData } from "../data/Payloads";

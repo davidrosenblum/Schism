@@ -1,4 +1,4 @@
-import { store } from "../Client";
+import { store } from "..";
 import { showAlertModal } from "../actions/AlertModalActions";
 import { setMapLeavePending, setMapJoinPending, setMapCreatePending, setMapListData, setMapListPending } from "../actions/MapListActions";
 import { showOverview, showGame } from "../actions/MenuActions";

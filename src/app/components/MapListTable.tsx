@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Input, Button, Table } from "./core";
-import { store } from "../Client";
+import { store } from "..";
 import { showMapCreate } from "../actions/MenuActions";
 import { MapDifficulties, MapTypes } from "../data/MapData";
 import { MapListItem } from "../data/Payloads";

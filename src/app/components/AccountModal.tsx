@@ -1,10 +1,14 @@
 import * as React from "react";
+import { Dispatch } from "redux";
+import { connect } from "react-redux";
 import { Button, Input, Modal } from "./core";
-import { store } from "../Client";
 import { setAccountModalOpen } from "../actions/AccountActions";
+import { AppState } from "../reducers";
 import { requestAccount } from "../requests/AjaxRequests";
 
-export const AccountModal = () => {
+type Props = StateFromProps & DispatchFromProps;
+
+export const AccountModal = (props:Props) => {
     const [username, setUsername] = React.useState("");
     const [password, setPassword] = React.useState("");
     const [pwConfirm, setPwConfirm] = React.useState("");
@@ -22,9 +26,7 @@ export const AccountModal = () => {
         setPwConfirm(evt.target.value);
     };
 
-    const onModalClose = () => {
-        store.dispatch(setAccountModalOpen(false));
-    };
+    const onModalClose = () => props.closeAccountModal();
 
     const onSubmit = (evt:React.FormEvent<HTMLFormElement>) => {
         evt.preventDefault();
@@ -45,9 +47,8 @@ export const AccountModal = () => {
         });
     };
 
-    const {modalOpen} = store.getState().account;
-
-    const disabled:boolean = store.getState().account.pendingAccount;
+    const {modalOpen, pendingAccount} = props;
+    const disabled:boolean = pendingAccount;
 
     return (
         <Modal open={modalOpen} className="text-center" header="Account Registration" onClose={onModalClose}>
@@ -100,3 +101,23 @@ export const AccountModal = () => {
         </Modal>
     );
 };
+
+interface StateFromProps{
+    modalOpen:boolean;
+    pendingAccount:boolean;
+}
+
+const mapStateToProps = (state:AppState):StateFromProps => ({
+    modalOpen: state.account.modalOpen,
+    pendingAccount: state.account.pendingAccount
+});
+
+interface DispatchFromProps{
+    closeAccountModal:()=>void;
+}
+
+const mapDispatchToProps = (dispatch:Dispatch):DispatchFromProps => ({
+    closeAccountModal: () => dispatch(setAccountModalOpen(false))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(AccountModal);

@@ -1,4 +1,4 @@
-import { store } from "../Client";
+import { store } from "..";
 import { setLoginPending, setLogoutPending } from "../actions/AccountActions";
 import { showAlertModal } from "../actions/AlertModalActions";
 import { showPlayerSelect, showLogin } from "../actions/MenuActions";

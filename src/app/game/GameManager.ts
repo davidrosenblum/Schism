@@ -1,7 +1,7 @@
 import { GameEntity } from "./GameEntity";
 import { GameEntityFactory } from "./GameEntityFactory";
 import { MapTileFactory } from "./MapTileFactory";
-import { store } from "../Client";
+import { store } from "..";
 import { setTargetData } from "../actions/GameStatsActions";
 import { MapJoinData, MapFxData, UnitState } from "../data/Payloads";
 import { AnimatedSprite } from "../gfx/AnimatedSprite";

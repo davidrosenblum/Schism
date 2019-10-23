@@ -1,8 +1,11 @@
 import * as React from "react";
+import { connect } from "react-redux";
+import { Dispatch } from "redux";
 import { Modal } from "./core";
-import { store } from "../Client";
 import { setAboutModalOpen } from "../actions/MenuActions";
+import { AppState } from "../reducers";
 import "./AboutModal.css";
+
 
 const stack:[string, string][] = [
     ["MongoDB", "https://www.mongodb.com/"],
@@ -15,12 +18,12 @@ const stack:[string, string][] = [
     ["Webpack", "https://webpack.js.org/"],
 ];
 
-export const AboutModal = () => {
-    const onClose = () => {
-        store.dispatch(setAboutModalOpen(false));
-    };
+type Props = StateFromProps & DispatchFromProps;
 
-    const {aboutOpen} = store.getState().menu;
+export const AboutModal = (props:Props) => {
+    const onClose = () => props.closeAboutModal();
+
+    const {aboutOpen} = props;
 
     const listItems = stack.map((tech, i) => {
         const [name, url] = tech;
@@ -58,3 +61,21 @@ export const AboutModal = () => {
         </Modal>
     )
 };
+
+interface StateFromProps{
+    aboutOpen:boolean;
+}
+
+const mapStateToProps = (state:AppState):StateFromProps => ({
+    aboutOpen: state.menu.aboutOpen
+});
+
+interface DispatchFromProps{
+    closeAboutModal:()=>void;
+}
+
+const mapDispatchToProps = (dispatch:Dispatch):DispatchFromProps => ({
+    closeAboutModal: () => dispatch(setAboutModalOpen(false))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(AboutModal);

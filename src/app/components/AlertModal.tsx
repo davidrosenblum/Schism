@@ -1,16 +1,18 @@
 import * as React from "react";
+import { connect } from "react-redux";
+import { Dispatch } from "redux";
 import { Modal } from "./core";
-import { store } from "../Client";
 import { hideAlertModal } from "../actions/AlertModalActions";
+import { AppState } from "../reducers";
 
-export const AlertModal = () => {
-    const onModalClose = () => {
-        store.dispatch(hideAlertModal());
-    };
+type Props = StateFromProps & DispatchFromProps;
+
+export const AlertModal = (props:Props) => {
+    const onModalClose = () => props.closeAlertModal();
 
     const {
         modalOpen, header, body, footer
-    } = store.getState().alertModal;
+    } = props;
 
     return (
         <Modal open={modalOpen} header={header} footer={footer} onClose={onModalClose}>
@@ -20,3 +22,24 @@ export const AlertModal = () => {
         </Modal>
     );
 };
+
+interface StateFromProps{
+    modalOpen:boolean;
+    header:string;
+    body:string;
+    footer:string;
+}
+
+const mapStateToProps = (state:AppState):StateFromProps => ({
+    ...state.alertModal
+});
+
+interface DispatchFromProps{
+    closeAlertModal:()=>void;
+}
+
+const mapDispatchToProps = (dispatch:Dispatch):DispatchFromProps => ({
+    closeAlertModal: () => dispatch(hideAlertModal())
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(AlertModal);

@@ -1,23 +1,24 @@
 import * as React from "react";
+import { connect } from "react-redux";
+import { Dispatch } from "redux";
 import { Button, MenuContainer } from "./core";
-import { store } from "../Client";
-import { PlayerSelectFigure } from "./PlayerSelectFigure";
+import PlayerSelectFigure from "./PlayerSelectFigure";
+import { showPlayerCreate } from "../actions/MenuActions";
+import { AppState } from "../reducers";
 import { requestLogout } from "../requests/AccountRequests";
 import { requestPlayerList } from "../requests/PlayerListRequests";
 
-export const PlayerSelect = () => {
+type Props = StateFromProps & DispatchFromProps;
+
+export const PlayerSelect = (props:Props) => {
     React.useEffect(() => {
         requestPlayerList();
     }, []);
 
     const checkDisabled = ():boolean => {
-        const {playerList, account} = store.getState();
-
         const {
-            pendingCreate, pendingSelect, pendingDelete
-        } = playerList;
-
-        const {pendingLogout} = account;
+            pendingCreate, pendingSelect, pendingDelete, pendingLogout
+        } = props;
 
         return pendingCreate || pendingSelect || pendingDelete || pendingLogout;
     };
@@ -28,8 +29,8 @@ export const PlayerSelect = () => {
     };
 
     const {
-        pendingList, list
-    } = store.getState().playerList;
+        pendingList, list, showPlayerCreate
+    } = props;
 
     const loading:boolean = (pendingList || !list);
     const disabled:boolean = checkDisabled();
@@ -45,6 +46,7 @@ export const PlayerSelect = () => {
                     <PlayerSelectFigure
                         disabled={disabled}
                         list={list}
+                        showPlayerCreate={showPlayerCreate}
                     />
                 )
             }
@@ -57,3 +59,31 @@ export const PlayerSelect = () => {
         </MenuContainer>
     );
 };
+
+interface StateFromProps{
+    pendingList:boolean;
+    pendingDelete:boolean;
+    pendingSelect:boolean;
+    pendingCreate:boolean;
+    pendingLogout:boolean;
+    list:any;
+}
+
+const mapStateToProps = (state:AppState):StateFromProps => ({
+    pendingList: state.playerList.pendingList,
+    pendingDelete: state.playerList.pendingDelete,
+    pendingSelect: state.playerList.pendingSelect,
+    pendingCreate: state.playerList.pendingCreate,
+    pendingLogout: state.account.pendingLogout,
+    list: state.playerList.list
+});
+
+interface DispatchFromProps{
+    showPlayerCreate:()=>void;
+}
+
+const mapDispatchToProps = (dispatch:Dispatch):DispatchFromProps => ({
+    showPlayerCreate: () => dispatch(showPlayerCreate())
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(PlayerSelect);

@@ -1,4 +1,4 @@
-import { store } from "../Client";
+import { store } from "..";
 import { showAlertModal } from "../actions/AlertModalActions";
 import { setPlayerData } from "../actions/GameStatsActions";
 import { showPlayerSelect, showOverview } from "../actions/MenuActions";
