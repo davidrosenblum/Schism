@@ -34,13 +34,15 @@ export const chatBuffer = {
     onData: null,
     write: (text:string) => {
         chatBuffer.buffer.push(text);
-        if(chatBuffer.onData){
+        if(chatBuffer.onData)
             chatBuffer.onData(chatBuffer.read());
-        }
     },
     read: () => {
         const text:string = chatBuffer.buffer.join("\n");
         chatBuffer.buffer = [];
         return text;
+    },
+    get hasData(){
+        return chatBuffer.buffer.length > 0;
     }
 };

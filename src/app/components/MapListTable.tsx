@@ -1,13 +1,15 @@
 import * as React from "react";
+import { connect } from "react-redux";
+import { Dispatch } from "redux";
 import { Input, Button, Table } from "./core";
-import { store } from "..";
 import { showMapCreate } from "../actions/MenuActions";
 import { MapDifficulties, MapTypes } from "../data/MapData";
 import { MapListItem } from "../data/Payloads";
+import { AppState } from "../reducers";
 import { requestMapList, requestMapJoin } from "../requests/MapListRequests";
 import "./MapListTable.css";
 
-interface Props{
+interface Props extends StateFromProps, DispatchFromProps{
     disabled?:boolean;
 }
 
@@ -25,7 +27,7 @@ export const MapListTable = (props:Props) => {
     }, [selectedMap]);
 
     React.useEffect(() => {
-        const {list} = store.getState().mapList;
+        const {list} = props;
         if(selectedMap && list && !list.find(val => val && val.id === selectedMap.id))
             setSelectedMap(null);
     });
@@ -39,13 +41,13 @@ export const MapListTable = (props:Props) => {
     };
 
     const onRefresh = () => {
-        if(!store.getState().mapList.pendingJoin)
+        if(!props.pendingJoin)
             requestMapList();
     };
 
     const onCreate = () => {
-        if(!store.getState().mapList.pendingJoin)
-            store.dispatch(showMapCreate());
+        if(!props.pendingJoin)
+            props.showMapCreate();
     };
 
     const onSubmit = (evt:React.FormEvent<HTMLFormElement>) => {
@@ -54,7 +56,7 @@ export const MapListTable = (props:Props) => {
             requestMapJoin(selectedMap.id, password); 
     };
 
-    const {pendingList, list} = store.getState().mapList;
+    const {pendingList, list} = props;
 
     if(pendingList || !list){
         return <div>Loading...</div>;
@@ -79,7 +81,6 @@ export const MapListTable = (props:Props) => {
     }
 
     const filteredList = filter ? list.filter(val => {
-        console.log('val', val)
         return val.customName.toLowerCase().includes(filter) ||
             MapTypes[val.type].mapName.includes(filter) ||
             MapDifficulties[val.difficulty].difficulty.includes(filter) ||
@@ -176,3 +177,25 @@ export const MapListTable = (props:Props) => {
         </form>
     );
 };
+
+interface StateFromProps{
+    list:MapListItem[];
+    pendingJoin:boolean;
+    pendingList:boolean;
+}
+
+const mapStateToProps = (state:AppState):StateFromProps => ({
+    list: state.mapList.list,
+    pendingJoin: state.mapList.pendingJoin,
+    pendingList: state.mapList.pendingList
+});
+
+interface DispatchFromProps{
+    showMapCreate:()=>void;
+}
+
+const mapDispatchToProps = (dispatch:Dispatch):DispatchFromProps => ({
+    showMapCreate: () => dispatch(showMapCreate())
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(MapListTable);

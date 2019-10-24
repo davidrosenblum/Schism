@@ -1,7 +1,7 @@
 import * as React from "react";
 import { connect } from "react-redux";
 import { Button } from "./core";
-import { HudChat } from "./HudChat";
+import HudChat from "./HudChat";
 import HudPlayerStats from "./HudPlayerStats";
 import HudTargetStats from "./HudTargetStats";
 import { AppState } from "../reducers";

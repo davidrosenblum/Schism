@@ -1,4 +1,5 @@
 import * as React from "react";
+import { connect } from "react-redux";
 import { chatBuffer } from "../controllers/InGameController";
 import { GameSocket } from "../game/GameSocket";
 import * as outputBackground from "../assets/images/ui_box_1.png";
@@ -34,20 +35,17 @@ export const HudChat = () => {
     };
 
     const updateOutputText = (text:string) => {
-        if(outputText){
+        if(outputText)
             setOutputText(`${outputText}\n${text}`);
-        }
-        else{
+        else
             setOutputText(text);
-        }
 
         scrollText();
     };
 
     const scrollText = () => {
-        if(textareaRef.current){
-            textareaRef.current.scrollTop = textareaRef.current.scrollHeight;
-        }
+        if(textareaRef.current)
+            textareaRef.current.scrollTop = textareaRef.current.scrollHeight
     };
 
     const sendChat = () => {
@@ -64,7 +62,7 @@ export const HudChat = () => {
             setHistoryIndex(index);
             setInputText(history[index]);
         }
-    }
+    };
 
     const historyDown = () => {
         const index:number = historyIndex - 1;
@@ -76,13 +74,16 @@ export const HudChat = () => {
 
     React.useEffect(() => {
         chatBuffer.onData = updateOutputText;
+
+        if(chatBuffer.hasData && chatBuffer.onData)
+            chatBuffer.onData();
+
         return () => {
-            if(chatBuffer.onData === updateOutputText){
+            if(chatBuffer.onData === updateOutputText)
                 chatBuffer.onData = null;
-            }
         }
     });
-    
+
     return (
         <div className="hud-chat-container hud-item">
             <div className="hud-chat-output-container">
@@ -106,3 +107,5 @@ export const HudChat = () => {
         </div>
     );
 };
+
+export default connect()(HudChat);
