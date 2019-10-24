@@ -263,6 +263,7 @@ export class MapInstance{
                 this.createEffect(MapFxFactory.create("rez", user.player.id));
                 this.chatAll(`${target.name} has been revived.`);
 
+                user.player.onDeath = evt => this.onPlayerDeath(evt, user);
                 user.player.health.refill();
                 user.player.mana.refill();
                 user.player.setState({facing: "right", anim: "idle"});

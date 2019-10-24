@@ -1,7 +1,7 @@
 import * as React from "react";
 import { connect } from "react-redux";
 import { Button, MenuContainer } from "./core";
-import { MapListTable } from "./MapListTable";
+import MapListTable from "./MapListTable";
 import { requestLogout } from "../requests/AccountRequests";
 import { AppState } from "../reducers";
 
